@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mainstay | Ops Hub — Create Charge</title>
+  <!-- Match the existing Ops Hub font stack: system Helvetica/Arial -->
+
+  <style>
+    /* ── Reset & Base ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: #000;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    a { color: #000; text-decoration: underline; }
+    a:hover { color: #000; }
+
+    /* ── Top Nav ───────────────────────────────────────── */
+    .topnav {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topnav-logo {
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 40px;
+      color: #000;
+    }
+    .topnav-logo-icon {
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .topnav-logo-icon svg { width: 28px; height: 28px; display: block; }
+    .topnav-links { display: flex; gap: 0; flex: 1; }
+    .topnav-links a {
+      padding: 0 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #000;
+      text-decoration: none;
+      line-height: 56px;
+    }
+    .topnav-links a:hover { color: #000; text-decoration: none; }
+    .topnav-links a.active { color: #000; font-weight: 600; }
+    .topnav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .topnav-right select {
+      border: 1px solid #d4d4d4;
+      border-radius: 4px;
+      padding: 6px 28px 6px 10px;
+      font-size: 13px;
+      background: #fff;
+      color: #000;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath stroke='%23666' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m3 4.5 3 3 3-3'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .logout-icon {
+      color: #666;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .logout-icon:hover { color: #000; }
+
+    /* ── Page Shell ────────────────────────────────────── */
+    .page { max-width: 1400px; margin: 0 auto; padding: 20px 24px 80px; }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      font-size: 13px;
+      color: #000;
+      margin-bottom: 16px;
+    }
+    .breadcrumb a { color: #000; text-decoration: underline; }
+    .breadcrumb a:last-of-type { font-weight: 600; }
+    .breadcrumb span { margin: 0 6px; color: #000; }
+    .breadcrumb .current { color: #000; }
+
+    /* Page Header */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .page-header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #000;
+    }
+    .page-header p {
+      font-size: 13px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    /* ── Stepper ───────────────────────────────────────── */
+    .stepper {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .step {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      position: relative;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all .15s;
+    }
+    .step:hover { background: #fafafa; }
+    .step.active { border-bottom-color: #000; }
+    .step.active .step-num { background: #000; color: #fff; border-color: #000; }
+    .step.completed .step-num { background: #000; color: #fff; border-color: #000; }
+    .step-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid #d4d4d4;
+      color: #666;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600;
+      flex-shrink: 0;
+      transition: all .15s;
+    }
+    .step-label { font-size: 13px; font-weight: 600; color: #000; }
+    .step-sublabel { font-size: 11px; color: #666; font-weight: 400; }
+
+    /* ── Section (flat, no card chrome) ────────────────── */
+    .card {
+      background: #fff;
+      margin-bottom: 24px;
+    }
+    .card-header {
+      padding: 0 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-header h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #000;
+    }
+    .card-header .badge {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: #f3ece0;
+      color: #8a6d3b;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .card-body { padding: 0; }
+
+    /* ── Form ──────────────────────────────────────────── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-row.full { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #000;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .form-group label .req { color: #d92d20; }
+    .form-group label .tooltip-icon {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #e5e5e5;
+      color: #666;
+      font-size: 10px;
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: help;
+      position: relative;
+    }
+    .form-group label .tooltip-icon:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 400;
+      padding: 6px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .form-group .hint {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      border: 1px solid #d4d4d4;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #000;
+      background: #fff;
+      transition: border-color .15s;
+      width: 100%;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #000;
+    }
+    textarea { resize: vertical; min-height: 72px; }
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath stroke='%23666' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m3 4.5 3 3 3-3'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px;
+      cursor: pointer;
+    }
+    select[disabled], select.empty-state { background-color: #f3ece0; border-color: #d4d4d4; }
+    .input-prefix {
+      position: relative;
+    }
+    .input-prefix span {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      font-size: 13px;
+      pointer-events: none;
+    }
+    .input-prefix input { padding-left: 22px; }
+
+    /* Amount match indicator */
+    .amount-match {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .amount-match.match { background: #f0f7ed; color: #2d5a1f; }
+    .amount-match.mismatch { background: #fef0f0; color: #7c0a0a; }
+    .amount-match svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* ── File Upload Zone ──────────────────────────────── */
+    .upload-zone {
+      border: 1px dashed #d4d4d4;
+      border-radius: 4px;
+      padding: 24px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .15s;
+      background: #fafafa;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: #000;
+      background: #f5f5f5;
+    }
+    .upload-zone svg { width: 28px; height: 28px; color: #666; margin-bottom: 8px; }
+    .upload-zone p { font-size: 13px; color: #000; }
+    .upload-zone p strong { color: #000; text-decoration: underline; }
+    .upload-zone .supported { font-size: 11px; color: #666; margin-top: 4px; }
+    .uploaded-files { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .uploaded-file {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+    .uploaded-file .file-icon {
+      width: 28px; height: 28px;
+      border-radius: 4px;
+      background: #f3ece0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .uploaded-file .file-info { flex: 1; }
+    .uploaded-file .file-name { font-weight: 500; color: #000; }
+    .uploaded-file .file-size { font-size: 11px; color: #94a3b8; }
+    .uploaded-file .file-remove {
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+    }
+    .uploaded-file .file-remove:hover { color: #ef4444; background: #fef2f2; }
+
+    /* ── Checkbox / Toggle ─────────────────────────────── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+    .toggle-row + .toggle-row { border-top: 1px solid #f0f0f0; }
+    .toggle-label { display: flex; flex-direction: column; }
+    .toggle-label span:first-child { font-size: 13px; font-weight: 600; color: #000; }
+    .toggle-label span:last-child { font-size: 12px; color: #666; }
+    .toggle {
+      width: 36px; height: 20px;
+      background: #d4d4d4;
+      border-radius: 99px;
+      position: relative;
+      cursor: pointer;
+      transition: background .2s;
+      flex-shrink: 0;
+    }
+    .toggle.on { background: #000; }
+    .toggle::after {
+      content: '';
+      width: 16px; height: 16px;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px; left: 2px;
+      transition: transform .2s;
+      box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    }
+    .toggle.on::after { transform: translateX(16px); }
+
+    /* ── Validation Banner ─────────────────────────────── */
+    .validation-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .validation-banner.info { background: #f3ece0; border: 1px solid #e8dcc0; color: #5a4a2a; }
+    .validation-banner.warn { background: #fef6e7; border: 1px solid #f3d995; color: #7c4a00; }
+    .validation-banner.error { background: #fef0f0; border: 1px solid #f3c0c0; color: #7c0a0a; }
+    .validation-banner.success { background: #f0f7ed; border: 1px solid #c9e0b5; color: #2d5a1f; }
+    .validation-banner svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Summary Panel ─────────────────────────────────── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .summary-item .s-label { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: #666; font-weight: 600; }
+    .summary-item .s-value { font-size: 13px; font-weight: 600; color: #000; }
+    .summary-item .s-value.money { font-size: 16px; font-weight: 700; color: #000; }
+
+    /* ── Actions Bar ───────────────────────────────────── */
+    .actions-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      margin-top: 8px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all .15s;
+      font-family: inherit;
+      line-height: 1.4;
+    }
+    .btn-primary {
+      background: #000;
+      color: #fff;
+      border-color: #000;
+    }
+    .btn-primary:hover { background: #000; }
+    .btn-secondary {
+      background: #fff;
+      color: #000;
+      border: 1px solid #d4d4d4;
+    }
+    .btn-secondary:hover { background: #f5f5f5; }
+    .btn-ghost {
+      background: transparent;
+      color: #666;
+      border-color: transparent;
+    }
+    .btn-ghost:hover { color: #000; }
+    .btn svg { width: 14px; height: 14px; }
+
+    /* ── Prototype Banner ──────────────────────────────── */
+    .proto-banner {
+      background: linear-gradient(90deg, #7c3aed, #2563eb);
+      color: #fff;
+      text-align: center;
+      padding: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .02em;
+    }
+
+    /* ── Responsive ────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .form-row { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .stepper { flex-direction: column; }
+      .step { border-right: none; border-bottom: 1px solid #e2e4e9; }
+    }
+
+    /* ── Clean mode: hides prototype-only chrome ──────── */
+    body.clean-mode .proto-banner,
+    body.clean-mode .callout-list { display: none !important; }
+    body.clean-mode .annotation::before { display: none !important; }
+
+    /* ── Floating mode toggle ─────────────────────────── */
+    .mode-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: #1e293b;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,.15);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      font-family: inherit;
+      transition: background .15s;
+    }
+    .mode-toggle:hover { background: #0f172a; }
+    .mode-toggle svg { width: 14px; height: 14px; }
+
+    /* ── Annotations (prototype-only) ─────────────────── */
+    .annotation {
+      position: relative;
+    }
+    .annotation::before {
+      content: attr(data-annotation);
+      position: absolute;
+      right: -12px;
+      top: -8px;
+      background: #7c3aed;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 5;
+      box-shadow: 0 2px 6px rgba(124,58,237,.3);
+    }
+    .callout-list {
+      background: #faf5ff;
+      border: 1px solid #e9d5ff;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .callout-list h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .callout-list ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .callout-list li {
+      font-size: 12px;
+      color: #4c1d95;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .callout-list li .num {
+      background: #7c3aed;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Prototype Banner -->
+<div class="proto-banner">
+  PROTOTYPE — Charge Creation Improvements &middot; Ops Design &amp; Strategy &middot; April 2026
+</div>
+
+<!-- Top Nav -->
+<nav class="topnav">
+  <div class="topnav-logo">
+    <div class="topnav-logo-icon">
+      <!-- Mainstay mark: 4 corner dots, 2 vertical bars, X diagonals -->
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Vertical bars -->
+        <line x1="5" y1="5" x2="5" y2="23" stroke="#000" stroke-width="1"/>
+        <line x1="23" y1="5" x2="23" y2="23" stroke="#000" stroke-width="1"/>
+        <!-- X diagonals -->
+        <line x1="5" y1="5" x2="23" y2="23" stroke="#000" stroke-width="1"/>
+        <line x1="23" y1="5" x2="5" y2="23" stroke="#000" stroke-width="1"/>
+        <!-- Corner dots -->
+        <circle cx="5" cy="5" r="1.6" fill="#000"/>
+        <circle cx="23" cy="5" r="1.6" fill="#000"/>
+        <circle cx="5" cy="23" r="1.6" fill="#000"/>
+        <circle cx="23" cy="23" r="1.6" fill="#000"/>
+      </svg>
+    </div>
+    Ops Hub
+  </div>
+  <div class="topnav-links">
+    <a href="#">Home</a>
+    <a href="#">Onboarding</a>
+    <a href="#">Customer tasks</a>
+    <a href="#">Ops tasks</a>
+    <a href="#" class="active">Payments</a>
+  </div>
+  <div class="topnav-right">
+    <select id="customer-select" onchange="onCustomerChange()">
+      <option value="firstkey">FirstKey Homes</option>
+      <option value="evergreen">Evergreen</option>
+      <option value="other_1">Invitation Homes</option>
+      <option value="other_2">American Homes 4 Rent</option>
+    </select>
+    <span class="logout-icon" title="Log out">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+    </span>
+  </div>
+</nav>
+
+<!-- Page -->
+<div class="page">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="#">Home</a><span>&rsaquo;</span>
+    <a href="#">Charges</a><span>&rsaquo;</span>
+    Create Charge
+  </div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1>Create Charge</h1>
+      <p>Create a new charge and optionally submit a funding request.</p>
+    </div>
+    <button class="btn btn-ghost" onclick="alert('Draft saved!')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+      Save Draft
+    </button>
+  </div>
+
+  <!-- Design Callouts (for EPD review) -->
+  <div class="callout-list">
+    <h3>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#7c3aed" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      What's improved in this prototype
+    </h3>
+    <ul>
+      <li><span class="num">1</span> <strong>Guided stepper</strong> — breaks form into logical sections to reduce errors and cognitive load</li>
+      <li><span class="num">2</span> <strong>Amount mismatch detection</strong> — real-time comparison flags discrepancies before submission</li>
+      <li><span class="num">3</span> <strong>Drag-and-drop evidence upload</strong> — supports multiple files with preview</li>
+      <li><span class="num">4</span> <strong>Inline field guidance</strong> — tooltip hints on confusing fields (hover the <span style="display:inline-flex;width:14px;height:14px;border-radius:50%;background:#e2e4e9;font-size:10px;align-items:center;justify-content:center;color:#64748b;">?</span> icons)</li>
+      <li><span class="num">5</span> <strong>Review &amp; confirm step</strong> — summary view before final submission prevents costly mistakes</li>
+      <li><span class="num">6</span> <strong>Visibility &amp; notification toggles</strong> — clearer controls with descriptions instead of bare checkboxes</li>
+      <li><span class="num">7</span> <strong>Auto-populated due date</strong> — defaults to 30 days from notice date, editable</li>
+      <li><span class="num">8</span> <strong>Customer-specific categories</strong> — category &amp; subcategory options auto-filter based on selected customer (e.g., FirstKey Homes sees only Dues and Fees &amp; Fines)</li>
+      <li><span class="num">9</span> <strong>Auto-populated notes</strong> — notes field pre-fills with the required template format based on category/subcategory selection, operators edit from there</li>
+    </ul>
+  </div>
+
+  <!-- Stepper -->
+  <div class="stepper">
+    <div class="step active" onclick="showStep(1)">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-label">Property &amp; Charge</div>
+        <div class="step-sublabel">Select property, amount, category</div>
+      </div>
+    </div>
+    <div class="step" onclick="showStep(2)">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-label">Details &amp; Evidence</div>
+        <div class="step-sublabel">Dates, files, notes</div>
+      </div>
+    </div>
+    <div class="step" onclick="showStep(3)">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-label">Review &amp; Submit</div>
+        <div class="step-sublabel">Confirm before creating</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- STEP 1: Property & Charge -->
+  <!-- ════════════════════════════════════════════════ -->
+  <div id="step-1">
+    <div class="card">
+      <div class="card-header">
+        <h2>Property &amp; HOA</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-row full">
+          <div class="form-group">
+            <label>Property <span class="req">*</span></label>
+            <input type="text" placeholder="Search by address, unit, or property ID..." value="1247 Elm Creek Dr, Austin, TX 78701">
+            <div class="hint">Selected: <strong>1247 Elm Creek Dr</strong> &middot; Unit 4B &middot; Prop ID: FKH-40291</div>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label>HOA <span class="req">*</span></label>
+            <select id="hoa-select" onchange="onHoaChange()">
+              <option value="">Select an HOA</option>
+              <option value="elm_creek" selected>Elm Creek HOA — Managed by RealManage</option>
+              <option value="willow_ridge">Willow Ridge Community Association — Managed by FirstService</option>
+            </select>
+            <div class="hint" id="hoa-hint" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Charge Details</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category <span class="req">*</span></label>
+            <select id="category-select" onchange="onCategoryChange()">
+              <option value="">Select a category</option>
+            </select>
+            <div class="hint" id="category-hint" style="display:none;"></div>
+          </div>
+          <div class="form-group">
+            <label>Subcategory <span class="req">*</span></label>
+            <select id="subcategory-select" onchange="onSubcategoryChange()">
+              <option value="">Select a subcategory</option>
+            </select>
+            <div class="hint" id="subcategory-hint" style="display:none;"></div>
+          </div>
+        </div>
+
+        <!-- Payment Schedule: property's recurring expected charges -->
+        <div class="form-row full" id="payment-schedule-row" style="display:none; margin-top: 16px;">
+          <div class="form-group">
+            <label>
+              Payment Schedule
+              <span class="tooltip-icon" data-tip="Recurring expected charges on file for this property. Picking one auto-fills the charge amount.">?</span>
+            </label>
+            <select id="payment-schedule-select" onchange="onPaymentScheduleChange()">
+              <option value="">Select from schedule...</option>
+            </select>
+            <div class="hint" id="payment-schedule-hint" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-top: 16px;">
+          <div class="form-group annotation" data-annotation="2">
+            <label>
+              Charge Amount <span class="req">*</span>
+              <span class="tooltip-icon" data-tip="Amount billed by the HOA for this charge">?</span>
+            </label>
+            <div class="input-prefix">
+              <span>$</span>
+              <input type="text" id="charge-amount" value="275.00" oninput="onChargeAmountInput()">
+            </div>
+            <div class="hint" id="charge-amount-hint" style="display:none;"></div>
+          </div>
+          <div class="form-group">
+            <label>
+              Customer Approved Amount
+              <span class="tooltip-icon" data-tip="Amount pre-approved by the customer. Leave blank if not yet approved.">?</span>
+            </label>
+            <div class="input-prefix">
+              <span>$</span>
+              <input type="text" id="approved-amount" value="" placeholder="0.00" oninput="checkAmountMatch()">
+            </div>
+          </div>
+        </div>
+        <div id="amount-indicator" class="amount-match mismatch">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <span><strong>Amount mismatch:</strong> Charge is $25.00 more than approved. A funding request may be needed.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <div></div>
+      <button class="btn btn-primary" onclick="goToStep(2)">
+        Continue
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- STEP 2: Details & Evidence -->
+  <!-- ════════════════════════════════════════════════ -->
+  <div id="step-2" style="display: none;">
+    <div class="card">
+      <div class="card-header">
+        <h2>Dates</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Notice Date <span class="req">*</span></label>
+            <input type="date" id="notice-date" value="2026-04-16" onchange="onNoticeDateChange()">
+          </div>
+          <div class="form-group annotation" data-annotation="7">
+            <label>
+              Due Date <span class="req">*</span>
+              <span class="tooltip-icon" data-tip="Auto-set to 30 days from notice date. You can change it.">?</span>
+            </label>
+            <input type="date" id="due-date" value="2026-05-16">
+            <div class="hint">Auto-calculated: 30 days from notice date</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Linked Violation</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-row full">
+          <div class="form-group">
+            <label>Linked Violation</label>
+            <select>
+              <option value="">No linked violation</option>
+              <option>VIO-20394 — Unapproved exterior paint (Open)</option>
+              <option>VIO-20112 — Landscaping non-compliance (Resolved)</option>
+            </select>
+            <div class="hint">Optional. Link an existing violation to this charge for audit trail.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card annotation" data-annotation="3">
+      <div class="card-header">
+        <h2>Evidence</h2>
+        <span class="badge">Required</span>
+      </div>
+      <div class="card-body">
+        <div class="upload-zone" id="upload-zone"
+             ondragover="event.preventDefault(); this.classList.add('dragover')"
+             ondragleave="this.classList.remove('dragover')"
+             ondrop="event.preventDefault(); this.classList.remove('dragover'); addFile()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"/></svg>
+          <p><strong>Click to upload</strong> or drag and drop</p>
+          <p class="supported">PDF, JPG, PNG, DOC up to 10 MB each</p>
+        </div>
+        <div class="uploaded-files" id="uploaded-files">
+          <div class="uploaded-file">
+            <div class="file-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            </div>
+            <div class="file-info">
+              <div class="file-name">HOA_Invoice_Q2_2026.pdf</div>
+              <div class="file-size">245 KB</div>
+            </div>
+            <span class="file-remove" onclick="this.parentElement.remove()">&times;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Notes &amp; Visibility</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-row full">
+          <div class="form-group">
+            <label>
+              Notes <span class="req">*</span>
+              <span class="tooltip-icon" data-tip="Auto-populated from category/subcategory. Edit as needed.">?</span>
+            </label>
+            <textarea id="notes-textarea" placeholder="Select a category and subcategory to auto-populate...">Annualized Dues: MM/DD/YYYY - MM/DD/YYYY</textarea>
+            <div class="hint" id="notes-hint" style="display:block;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              Auto-populated from <strong>Dues &rsaquo; Quarterly Dues</strong> template. Edit freely &mdash; brackets [ ] indicate fields to fill in.
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 12px" class="annotation" data-annotation="6">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span>Void</span>
+              <span>Mark this charge as void</span>
+            </div>
+            <div class="toggle" id="void-toggle" onclick="this.classList.toggle('on'); document.getElementById('void-notes-group').style.display = this.classList.contains('on') ? 'flex' : 'none'"></div>
+          </div>
+          <div class="form-group" id="void-notes-group" style="display:none; padding: 8px 0 12px;">
+            <label>Void Notes</label>
+            <textarea id="void-notes" placeholder="Reason for voiding this charge..." style="min-height:60px;"></textarea>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span>Customer Visible</span>
+              <span>Show this charge in the customer's portal</span>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span>Send Notification</span>
+              <span>Email the customer when this charge is created</span>
+            </div>
+            <div class="toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn btn-secondary" onclick="goToStep(1)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        Back
+      </button>
+      <button class="btn btn-primary" onclick="goToStep(3)">
+        Review &amp; Submit
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- STEP 3: Review & Submit -->
+  <!-- ════════════════════════════════════════════════ -->
+  <div id="step-3" style="display: none;">
+
+    <div id="funding-banner" class="validation-banner warn" style="display:none;">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      <div id="funding-banner-text"></div>
+    </div>
+
+    <!-- Void banner (shown when void toggle is on) -->
+    <div id="void-banner" class="validation-banner error" style="display:none;">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <div>
+        <strong>This charge will be created as VOID.</strong>
+        <div id="void-banner-notes" style="margin-top: 4px; font-weight: 400;"></div>
+      </div>
+    </div>
+
+    <div class="card annotation" data-annotation="5">
+      <div class="card-header">
+        <h2>Charge Summary</h2>
+        <span id="summary-status-badge" class="badge" style="display:none; background:#fef2f2; color:#991b1b;">VOID</span>
+      </div>
+      <div class="card-body">
+        <div class="summary-grid">
+          <div class="summary-item">
+            <span class="s-label">Property</span>
+            <span class="s-value">1247 Elm Creek Dr, Unit 4B</span>
+          </div>
+          <div class="summary-item">
+            <span class="s-label">HOA</span>
+            <span class="s-value" id="summary-hoa">Elm Creek HOA</span>
+          </div>
+          <div class="summary-item">
+            <span class="s-label">Charge Amount</span>
+            <span class="s-value money" id="summary-charge-amount">$275.00</span>
+          </div>
+          <div class="summary-item">
+            <span class="s-label">Customer Approved</span>
+            <span class="s-value money" id="summary-approved-amount" style="color: #dc2626;">$250.00</span>
+          </div>
+          <div class="summary-item">
+            <span class="s-label">Category</span>
+            <span class="s-value" id="summary-category">Dues &rsaquo; Quarterly Dues</span>
+          </div>
+          <div class="summary-item">
+            <span class="s-label">Linked Violation</span>
+            <span class="s-value" style="color:#94a3b8;">None</span>
+          </div>
+          <div class="summary-item">
+            <span class="s-label">Notice Date</span>
+            <span class="s-value" id="summary-notice-date">Apr 16, 2026</span>
+          </div>
+          <div class="summary-item">
+            <span class="s-label">Due Date</span>
+            <span class="s-value" id="summary-due-date">May 16, 2026</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #f1f5f9;">
+          <div class="summary-item">
+            <span class="s-label">Evidence</span>
+            <span class="s-value">HOA_Invoice_Q2_2026.pdf (245 KB)</span>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <div class="summary-item">
+            <span class="s-label">Notes</span>
+            <span class="s-value" id="summary-notes" style="font-weight: 400; color: #64748b;">Annualized Dues: MM/DD/YYYY - MM/DD/YYYY</span>
+          </div>
+        </div>
+        <!-- Void row (shown only when void toggle on) -->
+        <div id="summary-void-row" style="margin-top: 12px; display:none;">
+          <div class="summary-item">
+            <span class="s-label" style="color:#dc2626;">Void Status</span>
+            <span class="s-value" style="color: #dc2626;">Voided</span>
+          </div>
+          <div class="summary-item" style="margin-top: 8px;">
+            <span class="s-label" style="color:#dc2626;">Void Notes</span>
+            <span class="s-value" id="summary-void-notes" style="font-weight: 400; color: #64748b;">—</span>
+          </div>
+        </div>
+        <div style="margin-top: 12px; display: flex; gap: 24px;">
+          <div class="summary-item">
+            <span class="s-label">Charge Voided</span>
+            <span class="s-value" id="summary-voided" style="color: #94a3b8;">No</span>
+          </div>
+          <div class="summary-item">
+            <span class="s-label">Customer Visible</span>
+            <span class="s-value" id="summary-visible" style="color: #16a34a;">Yes</span>
+          </div>
+          <div class="summary-item">
+            <span class="s-label">Notification</span>
+            <span class="s-value" id="summary-notification" style="color: #94a3b8;">No</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn btn-secondary" onclick="goToStep(2)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        Back to Edit
+      </button>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-secondary" onclick="alert('Saved as draft.')">Save as Draft</button>
+        <button class="btn btn-primary" onclick="showSuccess()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          Create Charge
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success State -->
+  <div id="success-state" style="display: none; text-align: center; padding: 60px 20px;">
+    <div style="width: 56px; height: 56px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#16a34a" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <h2 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Charge Created Successfully</h2>
+    <p style="color: #64748b; font-size: 14px; margin-bottom: 8px;">Charge <strong>CHG-40582</strong> has been created for 1247 Elm Creek Dr.</p>
+    <div class="validation-banner warn" style="max-width: 480px; margin: 16px auto; text-align: left;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      <div><strong>Funding request FR-8821</strong> has been auto-generated for the $25.00 overage and sent to the approvals queue.</div>
+    </div>
+    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+      <button class="btn btn-secondary" onclick="location.reload()">Create Another</button>
+      <button class="btn btn-primary" onclick="alert('Navigate to charge detail')">View Charge</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Mode toggle button -->
+<button class="mode-toggle" id="mode-toggle" onclick="toggleCleanMode()">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+  <span id="mode-toggle-label">View clean UI</span>
+</button>
+
+<script>
+  /* ─── Clean mode toggle (hides prototype chrome) ────────── */
+  function applyCleanMode(clean) {
+    document.body.classList.toggle('clean-mode', clean);
+    document.getElementById('mode-toggle-label').textContent = clean ? 'Show annotations' : 'View clean UI';
+    const url = new URL(window.location);
+    if (clean) url.searchParams.set('clean', '1');
+    else url.searchParams.delete('clean');
+    window.history.replaceState({}, '', url);
+  }
+  function toggleCleanMode() {
+    applyCleanMode(!document.body.classList.contains('clean-mode'));
+  }
+  // Apply clean mode on load if ?clean in URL
+  if (new URLSearchParams(window.location.search).get('clean') === '1') {
+    // Defer until body is available
+    document.addEventListener('DOMContentLoaded', () => applyCleanMode(true));
+  }
+
+  /* ─── HOA data (property's recurring charge schedule) ────── */
+  // paymentSchedule is the list of recurring expected charges for a property.
+  // Each line item has a label, base amount, and a frequency.
+  // Display amount is derived from frequency based on the selected customer:
+  //   - FirstKey Homes → annualized (amount × periods-per-year)
+  //   - Other customers → quarterlized (amount → quarterly equivalent)
+  //   - One-time items are shown as-is for everyone.
+  const hoaData = {
+    'elm_creek': {
+      name: 'Elm Creek HOA',
+      paymentSchedule: [
+        { label: 'Dues',                  amount: 275.00, frequency: 'quarterly' },
+        { label: 'Special Assessment',    amount: 200.00, frequency: 'one-time' },
+        { label: 'Lawn Maintenance',      amount: 50.00,  frequency: 'monthly' },
+        { label: 'Pool Fob Replacement',  amount: 75.00,  frequency: 'one-time' }
+      ]
+    },
+    'willow_ridge': {
+      name: 'Willow Ridge Community Association',
+      paymentSchedule: [
+        { label: 'Dues',                  amount: 145.00,  frequency: 'monthly' },
+        { label: 'Special Assessment',    amount: 350.00,  frequency: 'one-time' },
+        { label: 'Amenities Fee',         amount: 40.00,   frequency: 'monthly' }
+      ]
+    }
+  };
+
+  // Periods-per-year for each frequency
+  const periodsPerYear = { monthly: 12, quarterly: 4, 'semi-annual': 2, annual: 1 };
+
+  // Convert an item's base amount to the display amount for the current customer
+  function getDisplayAmount(item) {
+    if (item.frequency === 'one-time') return item.amount;
+    const customer = document.getElementById('customer-select').value;
+    const periods = periodsPerYear[item.frequency] || 1;
+    if (customer === 'firstkey') {
+      // Annualized: monthly × 12, quarterly × 4, semi-annual × 2
+      return item.amount * periods;
+    } else {
+      // Quarterlized: monthly × 3, quarterly × 1, semi-annual ÷ 2, annual ÷ 4
+      return item.amount * (periods / 4);
+    }
+  }
+
+  // Build the display label for a schedule item: "<Label> (<View Frequency>)"
+  function getDisplayLabel(item) {
+    if (item.frequency === 'one-time') return item.label + ' (One-time)';
+    const customer = document.getElementById('customer-select').value;
+    const view = (customer === 'firstkey') ? 'Annualized' : 'Quarterlized';
+    return item.label + ' (' + view + ')';
+  }
+
+  /* ─── Category / Subcategory data model ─────────────────── */
+  const categoryData = {
+    // FirstKey Homes — curated set
+    firstkey: {
+      categories: ['Dues', 'Fees & Fines'],
+      subcategories: {
+        'Dues': [
+          'Annual Dues',
+          'Dues Increase / Assumed Dues',
+          'Monthly Dues',
+          'Quarterly Dues',
+          'Semi-Annual Dues',
+          'Other'
+        ],
+        'Fees & Fines': [
+          'Admin Fee',
+          'Late Fee',
+          'Other',
+          'Special Assessment',
+          'Utilities Fee',
+          'Violation Fine'
+        ]
+      }
+    },
+    // Evergreen — includes Adjustments & Miscellaneous
+    evergreen: {
+      categories: ['Dues', 'Fees & Fines', 'Adjustments & Miscellaneous'],
+      subcategories: {
+        'Dues': [
+          'Annual Dues',
+          'Dues Increase / Assumed Dues',
+          'Monthly Dues',
+          'Quarterly Dues',
+          'Semi-Annual Dues',
+          'Other'
+        ],
+        'Fees & Fines': [
+          'Admin Fee',
+          'Amenities Fee',
+          'Closing Fee',
+          'Collections / Legal Fee',
+          'Internet Fee',
+          'Late Fee',
+          'Late Interest',
+          'Lease Registration Fee',
+          'Other',
+          'Special Assessment',
+          'Utilities Fee',
+          'Violation Fine'
+        ],
+        'Adjustments & Miscellaneous': [
+          'Adjustment',
+          'Other',
+          'Payment',
+          'Rolling Prior Balance'
+        ]
+      }
+    },
+    // Default for all other customers — full set
+    default: {
+      categories: ['Dues', 'Fees & Fines'],
+      subcategories: {
+        'Dues': [
+          'Annual Dues',
+          'Dues Increase / Assumed Dues',
+          'Monthly Dues',
+          'Other',
+          'Quarterly Dues'
+        ],
+        'Fees & Fines': [
+          'Admin Fee',
+          'Amenities Fee',
+          'Closing Fee',
+          'Collections / Legal Fee',
+          'Internet Fee',
+          'Late Fee',
+          'Late Interest',
+          'Lease Registration Fee',
+          'Other',
+          'Special Assessment',
+          'Utilities Fee',
+          'Violation Fine'
+        ]
+      }
+    }
+  };
+
+  function getCustomerConfig() {
+    const val = document.getElementById('customer-select').value;
+    return categoryData[val] || categoryData['default'];
+  }
+
+  function populateCategories() {
+    const config = getCustomerConfig();
+    const catSel = document.getElementById('category-select');
+    const prev = catSel.value;
+    catSel.innerHTML = '<option value="">Select a category</option>';
+    config.categories.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      if (c === prev) opt.selected = true;
+      catSel.appendChild(opt);
+    });
+    // Show hint for FirstKey
+    const hint = document.getElementById('category-hint');
+    if (document.getElementById('customer-select').value === 'firstkey') {
+      hint.style.display = 'block';
+      hint.innerHTML = 'Filtered for <strong>FirstKey Homes</strong> — only Dues and Fees & Fines available';
+    } else {
+      hint.style.display = 'none';
+    }
+    populateSubcategories();
+  }
+
+  function populateSubcategories() {
+    const config = getCustomerConfig();
+    const cat = document.getElementById('category-select').value;
+    const subSel = document.getElementById('subcategory-select');
+    const subHint = document.getElementById('subcategory-hint');
+    subSel.innerHTML = '<option value="">Select a subcategory</option>';
+
+    if (cat && config.subcategories[cat]) {
+      config.subcategories[cat].forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        subSel.appendChild(opt);
+      });
+      // Hint for FirstKey restricted subcategories
+      if (document.getElementById('customer-select').value === 'firstkey' && cat === 'Fees & Fines') {
+        subHint.style.display = 'block';
+        subHint.innerHTML = 'Filtered for <strong>FirstKey Homes</strong> — 6 of 12 subcategories shown';
+      } else {
+        subHint.style.display = 'none';
+      }
+    } else {
+      subHint.style.display = 'none';
+    }
+  }
+
+  function onCustomerChange() {
+    populateCategories();
+    // Refresh payment schedule labels/amounts for the new customer view
+    refreshPaymentSchedule();
+    // Clear manual override so schedule auto-fill re-engages with new amounts
+    chargeAmountManuallyEdited = false;
+    autoFillChargeAmount();
+  }
+
+  function onCategoryChange() {
+    populateSubcategories();
+    autoPopulateNotes();
+    refreshPaymentSchedule();
+    // If switching away from Dues, clear any auto-filled amount so operator enters manually
+    const cat = document.getElementById('category-select').value;
+    if (cat !== 'Dues') {
+      chargeAmountManuallyEdited = false;
+      document.getElementById('charge-amount').value = '';
+      document.getElementById('charge-amount-hint').style.display = 'none';
+      checkAmountMatch();
+    } else {
+      autoFillChargeAmount();
+    }
+  }
+
+  function onSubcategoryChange() {
+    autoPopulateNotes();
+    autoFillChargeAmount();
+  }
+
+  function onHoaChange() {
+    const hoaSel = document.getElementById('hoa-select');
+    const hoaHint = document.getElementById('hoa-hint');
+    const hoa = hoaData[hoaSel.value];
+    if (hoa && hoa.paymentSchedule && hoa.paymentSchedule.length > 0) {
+      hoaHint.style.display = 'block';
+      hoaHint.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> ' + hoa.paymentSchedule.length + ' recurring charges on file for this property.';
+    } else {
+      hoaHint.style.display = 'none';
+    }
+    refreshPaymentSchedule();
+    autoFillChargeAmount();
+  }
+
+  // Track whether charge amount was manually edited (so we don't overwrite on reselect)
+  let chargeAmountManuallyEdited = false;
+
+  function onChargeAmountInput() {
+    chargeAmountManuallyEdited = true;
+    const hint = document.getElementById('charge-amount-hint');
+    hint.style.display = 'block';
+    hint.innerHTML = '<span style="color:#7c3aed;">Manually overridden</span> &mdash; no longer auto-filling from payment schedule';
+    checkAmountMatch();
+  }
+
+  function onPaymentScheduleChange() {
+    // User explicitly picked a schedule — reset manual override flag so auto-fill takes effect
+    chargeAmountManuallyEdited = false;
+    autoFillChargeAmount();
+  }
+
+  function refreshPaymentSchedule() {
+    const row = document.getElementById('payment-schedule-row');
+    const sel = document.getElementById('payment-schedule-select');
+    const hint = document.getElementById('payment-schedule-hint');
+    const hoaSel = document.getElementById('hoa-select');
+    const hoa = hoaData[hoaSel.value];
+    const cat = document.getElementById('category-select').value;
+
+    // Only show for Dues
+    if (cat !== 'Dues') {
+      row.style.display = 'none';
+      return;
+    }
+
+    // Hide if no HOA or no schedule on file
+    if (!hoa || !hoa.paymentSchedule || hoa.paymentSchedule.length === 0) {
+      row.style.display = 'none';
+      return;
+    }
+
+    row.style.display = 'block';
+    const prev = sel.value;
+    sel.innerHTML = '<option value="">Select from schedule...</option>';
+    hoa.paymentSchedule.forEach((item, idx) => {
+      const opt = document.createElement('option');
+      opt.value = String(idx);
+      const displayAmt = getDisplayAmount(item);
+      opt.textContent = getDisplayLabel(item) + '  —  $' + displayAmt.toFixed(2);
+      sel.appendChild(opt);
+    });
+    if (prev !== '') sel.value = prev;
+
+    const customer = document.getElementById('customer-select').value;
+    const view = (customer === 'firstkey') ? 'annualized' : 'quarterlized';
+    hint.style.display = 'block';
+    hint.innerHTML = 'Recurring dues are shown <strong>' + view + '</strong> for this customer. One-time charges are shown as-is.';
+  }
+
+  function autoFillChargeAmount() {
+    const input = document.getElementById('charge-amount');
+    const hint = document.getElementById('charge-amount-hint');
+
+    // Only auto-fill if user hasn't manually overridden
+    if (chargeAmountManuallyEdited) return;
+
+    const hoaSel = document.getElementById('hoa-select');
+    const hoa = hoaData[hoaSel.value];
+    const scheduleIdx = document.getElementById('payment-schedule-select').value;
+
+    if (hoa && scheduleIdx !== '' && hoa.paymentSchedule[scheduleIdx]) {
+      const item = hoa.paymentSchedule[scheduleIdx];
+      const amt = getDisplayAmount(item);
+      input.value = amt.toFixed(2);
+      hint.style.display = 'block';
+      hint.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Auto-filled from <strong>' + hoa.name + '</strong> &rsaquo; ' + getDisplayLabel(item) + '. You can override.';
+      checkAmountMatch();
+    } else {
+      hint.style.display = 'none';
+    }
+  }
+
+  /* ─── Note templates ────────────────────────────────────── */
+  // {notice} and {due} are replaced with MM/DD/YYYY dates
+  const noteTemplates = {
+    'Dues': {
+      'Annual Dues':                'Annual Dues: {notice} - {due}',
+      'Monthly Dues':               'Annualized Dues: {notice} - {due}',
+      'Quarterly Dues':             'Annualized Dues: {notice} - {due}',
+      'Semi-Annual Dues':           'Annualized Dues: {notice} - {due}',
+      'Dues Increase / Assumed Dues': 'Dues Increase: {notice} - {due}',
+      'Other':                      '',
+    },
+    'Fees & Fines': {
+      'Admin Fee':              'Admin Fee - Assessment: {notice} - {due}',
+      'Amenities Fee':          'Amenities Fee: {notice} - {due}',
+      'Closing Fee':            'Closing Fee: {notice} - {due}',
+      'Collections / Legal Fee':'Collections / Legal Fee: {notice} - {due}',
+      'Internet Fee':           'Internet Fee: {notice} - {due}',
+      'Late Fee':               'Late Fee - Assessment: {notice} - {due}',
+      'Late Interest':          'Late Fee - Assessment: {notice} - {due}',
+      'Lease Registration Fee': 'Special Assessment: {notice} - {due} - Lease Registration',
+      'Special Assessment':     'Special Assessment: {notice} - {due} - [reason for charge]',
+      'Violation Fine':         'Violation Fine: {notice} - {due} - [violation category]',
+      'Utilities Fee':          'Utilities Fee: {notice} - {due} - [Utilities/Utility category]',
+      'Other':                  'Fee Type: {notice} - {due}',
+    },
+    'Adjustments & Miscellaneous': {
+      'Adjustment':             'Adjustment: {notice} - {due}',
+      'Rolling Prior Balance':  'Rolling Prior Balance: {notice} - {due}',
+      'Payment':                'Payment: {notice} - {due}',
+      'Other':                  '',
+    }
+  };
+
+  function formatDateUS(isoStr) {
+    return 'MM/DD/YYYY';
+  }
+
+  function autoPopulateNotes() {
+    const cat = document.getElementById('category-select').value;
+    const sub = document.getElementById('subcategory-select').value;
+    const textarea = document.getElementById('notes-textarea');
+    const hint = document.getElementById('notes-hint');
+
+    if (!cat || !sub) {
+      hint.style.display = 'none';
+      return;
+    }
+
+    const templates = noteTemplates[cat];
+    const tpl = templates ? templates[sub] : null;
+
+    if (tpl !== null && tpl !== undefined) {
+      const notice = formatDateUS(document.getElementById('notice-date').value);
+      const due = formatDateUS(document.getElementById('due-date').value);
+      const note = tpl.replace(/\{notice\}/g, notice).replace(/\{due\}/g, due);
+      textarea.value = note;
+      if (tpl) {
+        hint.style.display = 'block';
+        hint.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Auto-populated from <strong>' + cat + ' &rsaquo; ' + sub + '</strong> template. Edit freely — brackets [ ] indicate fields to fill in.';
+      } else {
+        hint.style.display = 'block';
+        hint.innerHTML = 'No template for this subcategory — enter notes manually.';
+      }
+    }
+  }
+
+  function onNoticeDateChange() {
+    // Auto-update due date to 30 days later
+    const nd = document.getElementById('notice-date').value;
+    if (nd) {
+      const d = new Date(nd);
+      d.setDate(d.getDate() + 30);
+      document.getElementById('due-date').value = d.toISOString().split('T')[0];
+    }
+    autoPopulateNotes();
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    populateCategories();
+    // Pre-select Dues > Quarterly Dues for the demo
+    document.getElementById('category-select').value = 'Dues';
+    populateSubcategories();
+    document.getElementById('subcategory-select').value = 'Quarterly Dues';
+    // Pre-select the first schedule item (Dues Quarterly) to demo auto-fill
+    refreshPaymentSchedule();
+    document.getElementById('payment-schedule-select').value = '0';
+    autoFillChargeAmount();
+    autoPopulateNotes();
+  });
+
+  /* ─── Step navigation ───────────────────────────────────── */
+  function goToStep(n) {
+    showStep(n);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showStep(n) {
+    document.getElementById('step-1').style.display = n === 1 ? 'block' : 'none';
+    document.getElementById('step-2').style.display = n === 2 ? 'block' : 'none';
+    document.getElementById('step-3').style.display = n === 3 ? 'block' : 'none';
+    document.getElementById('success-state').style.display = 'none';
+
+    // Update summary on step 3
+    if (n === 3) updateSummary();
+
+    document.querySelectorAll('.step').forEach((el, i) => {
+      el.classList.remove('active', 'completed');
+      if (i + 1 === n) el.classList.add('active');
+      if (i + 1 < n) el.classList.add('completed');
+    });
+  }
+
+  function updateSummary() {
+    const cat = document.getElementById('category-select').value || '—';
+    const sub = document.getElementById('subcategory-select').value || '—';
+    const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+
+    setText('summary-category', cat + (sub !== '—' ? ' \u203A ' + sub : ''));
+
+    // HOA
+    const hoaSel = document.getElementById('hoa-select');
+    const hoaText = hoaSel.options[hoaSel.selectedIndex]?.text.split(' — ')[0] || '—';
+    setText('summary-hoa', hoaText);
+
+    // Amounts
+    const charge = parseFloat(document.getElementById('charge-amount').value) || 0;
+    const approved = parseFloat(document.getElementById('approved-amount').value) || 0;
+    setText('summary-charge-amount', '$' + charge.toFixed(2));
+    setText('summary-approved-amount', approved ? '$' + approved.toFixed(2) : '—');
+    const approvedEl = document.getElementById('summary-approved-amount');
+    if (approvedEl) approvedEl.style.color = (approved && charge !== approved) ? '#dc2626' : '#0f172a';
+
+    // Funding-request banner
+    const fundingBanner = document.getElementById('funding-banner');
+    const fundingText = document.getElementById('funding-banner-text');
+    if (fundingBanner && fundingText) {
+      if (approved > 0 && charge > approved) {
+        const diff = (charge - approved).toFixed(2);
+        fundingBanner.style.display = 'flex';
+        fundingText.innerHTML = '<strong>Insufficient approved funds.</strong> The customer-approved amount ($' + approved.toFixed(2) + ') will not cover the full charge ($' + charge.toFixed(2) + '). A shortfall of $' + diff + ' will need additional funding approval before this charge can be paid.';
+      } else {
+        fundingBanner.style.display = 'none';
+      }
+    }
+
+    // Dates
+    const fmtDate = (iso) => {
+      if (!iso) return '—';
+      const d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    };
+    setText('summary-notice-date', fmtDate(document.getElementById('notice-date').value));
+    setText('summary-due-date', fmtDate(document.getElementById('due-date').value));
+
+    // Notes
+    setText('summary-notes', document.getElementById('notes-textarea').value || '—');
+
+    // Void status
+    const isVoid = document.getElementById('void-toggle').classList.contains('on');
+    const voidBanner = document.getElementById('void-banner');
+    const voidBadge = document.getElementById('summary-status-badge');
+    const voidRow = document.getElementById('summary-void-row');
+    const voidNotes = document.getElementById('void-notes').value.trim();
+
+    if (isVoid) {
+      voidBanner.style.display = 'flex';
+      voidBadge.style.display = 'inline-block';
+      voidRow.style.display = 'block';
+      const notesText = voidNotes || '(no reason provided)';
+      setText('summary-void-notes', notesText);
+      document.getElementById('void-banner-notes').textContent = voidNotes
+        ? 'Reason: ' + voidNotes
+        : 'No void reason provided. Consider adding one before submitting.';
+    } else {
+      voidBanner.style.display = 'none';
+      voidBadge.style.display = 'none';
+      voidRow.style.display = 'none';
+    }
+
+    // Charge Voided Yes/No
+    const voidedEl = document.getElementById('summary-voided');
+    if (voidedEl) {
+      voidedEl.textContent = isVoid ? 'Yes' : 'No';
+      voidedEl.style.color = isVoid ? '#dc2626' : '#94a3b8';
+    }
+
+    // Customer Visible / Notification (look for toggles by position)
+    const toggles = document.querySelectorAll('.toggle-row .toggle');
+    // toggles: [void, customer-visible, send-notification]
+    const visEl = document.getElementById('summary-visible');
+    const notifEl = document.getElementById('summary-notification');
+    if (toggles[1]) {
+      const on = toggles[1].classList.contains('on');
+      visEl.textContent = on ? 'Yes' : 'No';
+      visEl.style.color = on ? '#16a34a' : '#94a3b8';
+    }
+    if (toggles[2]) {
+      const on = toggles[2].classList.contains('on');
+      notifEl.textContent = on ? 'Yes' : 'No';
+      notifEl.style.color = on ? '#16a34a' : '#94a3b8';
+    }
+  }
+
+  /* ─── Amount match ──────────────────────────────────────── */
+  function checkAmountMatch() {
+    const charge = parseFloat(document.getElementById('charge-amount').value) || 0;
+    const approved = parseFloat(document.getElementById('approved-amount').value) || 0;
+    const ind = document.getElementById('amount-indicator');
+
+    if (approved === 0) {
+      ind.style.display = 'none';
+      return;
+    }
+
+    ind.style.display = 'flex';
+    if (charge === approved) {
+      ind.className = 'amount-match match';
+      ind.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span><strong>Amounts match</strong></span>';
+    } else if (charge > approved) {
+      const diff = (charge - approved).toFixed(2);
+      ind.className = 'amount-match mismatch';
+      ind.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg><span><strong>Insufficient approved funds:</strong> Approved amount is $${diff} short of the charge. Additional funding approval will be required.</span>`;
+    } else {
+      // charge < approved — approved exceeds charge, not a blocker, but surface it
+      const diff = (approved - charge).toFixed(2);
+      ind.className = 'amount-match mismatch';
+      ind.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span><strong>Approved amount exceeds charge</strong> by $${diff}. Verify the charge amount is correct.</span>`;
+    }
+  }
+
+  /* ─── File upload ───────────────────────────────────────── */
+  function addFile() {
+    const container = document.getElementById('uploaded-files');
+    const file = document.createElement('div');
+    file.className = 'uploaded-file';
+    file.innerHTML = `
+      <div class="file-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+      <div class="file-info"><div class="file-name">photo_evidence.jpg</div><div class="file-size">1.2 MB</div></div>
+      <span class="file-remove" onclick="this.parentElement.remove()">&times;</span>`;
+    container.appendChild(file);
+  }
+
+  /* ─── Success state ─────────────────────────────────────── */
+  function showSuccess() {
+    document.getElementById('step-3').style.display = 'none';
+    document.getElementById('success-state').style.display = 'block';
+    document.querySelectorAll('.step').forEach(el => el.classList.add('completed'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
