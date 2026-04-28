@@ -45,10 +45,9 @@ python3 -m http.server 8000
 # then visit http://localhost:8000
 ```
 
-## Companion docs
+## For engineers reviewing this
 
-- **[RESEARCH.md](./RESEARCH.md)** — descriptive system survey: what Create Charge looks like in Mainstay today, what foundation work has already landed, what's still missing, and where to take the project next. Best starting point for anyone arriving fresh.
-- **[TECH_BRIEF.md](./TECH_BRIEF.md)** — action-oriented integration plan: which existing components/endpoints each guardrail would plug into, what backend changes are needed, and the open product questions to resolve before implementation.
+See **[TECH_BRIEF.md](./TECH_BRIEF.md)** for a guardrail-by-guardrail integration map: which existing components and endpoints in the monorepo each piece would plug into, what backend changes are needed, and the open product questions worth working through before any implementation.
 
 ## Integration points
 
