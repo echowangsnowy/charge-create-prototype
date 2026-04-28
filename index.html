@@ -540,6 +540,91 @@
       display: inline-flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
+
+    /* ── Backend spec badge ───────────────────────────── */
+    .needs-backend {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: #fef0f0;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+    .backend-spec {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-top: 6px;
+      font-size: 11px;
+      color: #166534;
+      line-height: 1.6;
+    }
+    .backend-spec code {
+      background: #dcfce7;
+      border-radius: 3px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
+
+    /* ── BTR warning ──────────────────────────────────── */
+    .inline-warn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #7c4a00;
+      background: #fef6e7;
+      border: 1px solid #f3d995;
+      border-radius: 4px;
+      padding: 6px 10px;
+      margin-top: 6px;
+    }
+    .inline-warn svg { width: 14px; height: 14px; flex-shrink: 0; color: #b45309; }
+
+    /* ── Modal Overlay ─────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.35);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 500;
+    }
+    .modal-overlay.hidden { display: none; }
+    .modal-box {
+      background: #fff; border-radius: 8px;
+      width: 580px; max-width: calc(100vw - 40px);
+      max-height: calc(100vh - 80px); overflow-y: auto;
+      box-shadow: 0 8px 40px rgba(0,0,0,.18);
+      padding: 28px;
+    }
+    .modal-box h3 { font-size: 16px; font-weight: 700; color: #000; margin-bottom: 12px; }
+    .modal-box p { font-size: 13px; color: #444; margin-bottom: 16px; }
+    .modal-charge-card {
+      border: 1px solid #e5e5e5; border-radius: 4px;
+      padding: 14px 16px; margin-bottom: 12px;
+      background: #fafafa; font-size: 13px;
+    }
+    .modal-charge-card .mc-amount { font-size: 16px; font-weight: 700; color: #000; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-charge-card .mc-row { color: #444; margin-bottom: 3px; }
+    .modal-charge-card .mc-row strong { color: #000; }
+    .modal-charge-card .mc-meta { font-size: 11px; color: #94a3b8; margin-top: 6px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .confirm-box {
+      background: #fff; border-radius: 8px;
+      width: 420px; max-width: calc(100vw - 40px);
+      box-shadow: 0 8px 40px rgba(0,0,0,.18);
+      padding: 28px;
+    }
+    .confirm-box h3 { font-size: 16px; font-weight: 700; color: #000; margin-bottom: 8px; }
+    .confirm-box p { font-size: 13px; color: #444; margin-bottom: 20px; }
   </style>
 </head>
 <body>
@@ -553,15 +638,11 @@
 <nav class="topnav">
   <div class="topnav-logo">
     <div class="topnav-logo-icon">
-      <!-- Mainstay mark: 4 corner dots, 2 vertical bars, X diagonals -->
       <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Vertical bars -->
         <line x1="5" y1="5" x2="5" y2="23" stroke="#000" stroke-width="1"/>
         <line x1="23" y1="5" x2="23" y2="23" stroke="#000" stroke-width="1"/>
-        <!-- X diagonals -->
         <line x1="5" y1="5" x2="23" y2="23" stroke="#000" stroke-width="1"/>
         <line x1="23" y1="5" x2="5" y2="23" stroke="#000" stroke-width="1"/>
-        <!-- Corner dots -->
         <circle cx="5" cy="5" r="1.6" fill="#000"/>
         <circle cx="23" cy="5" r="1.6" fill="#000"/>
         <circle cx="5" cy="23" r="1.6" fill="#000"/>
@@ -626,8 +707,13 @@
       <li><span class="num">5</span> <strong>Review &amp; confirm step</strong> — summary view before final submission prevents costly mistakes</li>
       <li><span class="num">6</span> <strong>Visibility &amp; notification toggles</strong> — clearer controls with descriptions instead of bare checkboxes</li>
       <li><span class="num">7</span> <strong>Auto-populated due date</strong> — defaults to 30 days from notice date, editable</li>
-      <li><span class="num">8</span> <strong>Customer-specific categories</strong> — category &amp; subcategory options auto-filter based on selected customer (e.g., FirstKey Homes sees only Dues and Fees &amp; Fines)</li>
+      <li><span class="num">8</span> <strong>Customer-specific categories</strong> — category &amp; subcategory options auto-filter based on selected customer (e.g., FirstKey Homes sees only Dues and Fees &amp; Fines) <span class="needs-backend">needs backend</span></li>
       <li><span class="num">9</span> <strong>Auto-populated notes</strong> — notes field pre-fills with the required template format based on category/subcategory selection, operators edit from there</li>
+      <li><span class="num">10</span> <strong>Payment schedule auto-fill</strong> — recurring charges on file for this property auto-fill the charge amount when selected <span class="needs-backend">needs backend</span></li>
+      <li><span class="num">11</span> <strong>Send notification toggle</strong> — operator can choose to email the customer when the charge is created <span class="needs-backend">needs backend</span></li>
+      <li><span class="num">12</span> <strong>BTR community warning</strong> — surfaces the <code>is_build_to_rent</code> flag (already in backend) prominently when HOA is BTR</li>
+      <li><span class="num">13</span> <strong>Duplicate charge detection</strong> — warns before submitting if a matching charge exists within 3 days (mirrors existing <code>GET /charge/check_duplicates/</code>)</li>
+      <li><span class="num">14</span> <strong>Violation Fine confirmation</strong> — prompts if Violation Fine is selected without a linked violation (matches validation in <code>create.tsx</code>)</li>
     </ul>
   </div>
 
@@ -674,12 +760,19 @@
         </div>
         <div class="form-row full">
           <div class="form-group">
-            <label>HOA <span class="req">*</span></label>
+            <label>HOA <span class="req">*</span>
+              <span class="tooltip-icon" data-tip="hoa_id in the API. BTR flag is already on the HOA model.">?</span>
+            </label>
             <select id="hoa-select" onchange="onHoaChange()">
               <option value="">Select an HOA</option>
               <option value="elm_creek" selected>Elm Creek HOA — Managed by RealManage</option>
+              <option value="elm_creek_btr">Elm Creek BTR — Managed by RealManage (BTR)</option>
               <option value="willow_ridge">Willow Ridge Community Association — Managed by FirstService</option>
             </select>
+            <div id="btr-warn" class="inline-warn" style="display:none;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              Note: this is a BTR community
+            </div>
             <div class="hint" id="hoa-hint" style="display:none;"></div>
           </div>
         </div>
@@ -691,9 +784,11 @@
         <h2>Charge Details</h2>
       </div>
       <div class="card-body">
-        <div class="form-row">
+        <div class="form-row annotation" data-annotation="8">
           <div class="form-group">
-            <label>Category <span class="req">*</span></label>
+            <label>Category <span class="req">*</span>
+              <span class="tooltip-icon" data-tip="Filtered by customer portfolio. Backend spec: add portfolio_id param to GET /charge/categories/.">?</span>
+            </label>
             <select id="category-select" onchange="onCategoryChange()">
               <option value="">Select a category</option>
             </select>
@@ -708,25 +803,29 @@
           </div>
         </div>
 
-        <!-- Payment Schedule: property's recurring expected charges -->
-        <div class="form-row full" id="payment-schedule-row" style="display:none; margin-top: 16px;">
+        <!-- Payment Schedule — needs backend endpoint -->
+        <div class="form-row full annotation" data-annotation="10" id="payment-schedule-row" style="display:none; margin-top: 16px;">
           <div class="form-group">
             <label>
               Payment Schedule
-              <span class="tooltip-icon" data-tip="Recurring expected charges on file for this property. Picking one auto-fills the charge amount.">?</span>
+              <span class="tooltip-icon" data-tip="Recurring expected charges on file for this property. Picking one auto-fills the charge amount. Backend spec: new GET /charge/payment_schedule/?property_id=X&hoa_id=Y endpoint.">?</span>
             </label>
             <select id="payment-schedule-select" onchange="onPaymentScheduleChange()">
               <option value="">Select from schedule...</option>
             </select>
             <div class="hint" id="payment-schedule-hint" style="display:none;"></div>
+            <div class="backend-spec" style="display:none;" id="payment-schedule-spec">
+              <strong>Backend needed:</strong> <code>GET /charge/payment_schedule/?property_id=&lt;id&gt;&amp;hoa_id=&lt;id&gt;</code><br>
+              Returns recurring charges from the <code>PaymentSchedule</code> model / ETL. Each item: <code>{ label, amount_cents, frequency }</code>. Frontend derives display amount (annualized for FirstKey, quarterlized for others).
+            </div>
           </div>
         </div>
 
-        <div class="form-row" style="margin-top: 16px;">
-          <div class="form-group annotation" data-annotation="2">
+        <div class="form-row annotation" data-annotation="2" style="margin-top: 16px;">
+          <div class="form-group">
             <label>
               Charge Amount <span class="req">*</span>
-              <span class="tooltip-icon" data-tip="Amount billed by the HOA for this charge">?</span>
+              <span class="tooltip-icon" data-tip="Submitted as amount_cents (integer). e.g. $275.00 → 27500">?</span>
             </label>
             <div class="input-prefix">
               <span>$</span>
@@ -737,7 +836,7 @@
           <div class="form-group">
             <label>
               Customer Approved Amount
-              <span class="tooltip-icon" data-tip="Amount pre-approved by the customer. Leave blank if not yet approved.">?</span>
+              <span class="tooltip-icon" data-tip="customer_approved_amount_cents in the API. Leave blank if not yet approved.">?</span>
             </label>
             <div class="input-prefix">
               <span>$</span>
@@ -794,8 +893,10 @@
       <div class="card-body">
         <div class="form-row full">
           <div class="form-group">
-            <label>Linked Violation</label>
-            <select>
+            <label>Linked Violation
+              <span class="tooltip-icon" data-tip="violation_id in the API. If Violation Fine subcategory is selected without a linked violation, you'll be prompted to confirm on submit.">?</span>
+            </label>
+            <select id="violation-select">
               <option value="">No linked violation</option>
               <option>VIO-20394 — Unapproved exterior paint (Open)</option>
               <option>VIO-20112 — Landscaping non-compliance (Resolved)</option>
@@ -841,7 +942,7 @@
       </div>
       <div class="card-body">
         <div class="form-row full">
-          <div class="form-group">
+          <div class="form-group annotation" data-annotation="9">
             <label>
               Notes <span class="req">*</span>
               <span class="tooltip-icon" data-tip="Auto-populated from category/subcategory. Edit as needed.">?</span>
@@ -868,16 +969,19 @@
           <div class="toggle-row">
             <div class="toggle-label">
               <span>Customer Visible</span>
-              <span>Show this charge in the customer's portal</span>
+              <span>Show this charge in the customer's portal. Defaults from portfolio setting (<code>charge_default_customer_visible</code>).</span>
             </div>
-            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            <div class="toggle on" id="visible-toggle" onclick="this.classList.toggle('on')"></div>
           </div>
-          <div class="toggle-row">
+          <div class="toggle-row annotation" data-annotation="11">
             <div class="toggle-label">
-              <span>Send Notification</span>
-              <span>Email the customer when this charge is created</span>
+              <span>Send Notification <span class="needs-backend">needs backend</span></span>
+              <span>Email the customer when this charge is created. Backend spec: add <code>send_notification</code> bool to <code>POST /charge/</code>.</span>
             </div>
-            <div class="toggle" onclick="this.classList.toggle('on')"></div>
+            <div class="toggle" id="notify-toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="backend-spec" id="send-notification-spec" style="display:none; margin-top:0; margin-bottom:12px;">
+            <strong>Backend needed:</strong> Add <code>send_notification</code> (bool, default <code>False</code>) to <code>ChargeActions.create_charge()</code>. If <code>True</code>, dispatch a charge-created email to the customer contact on file for the portfolio. Use existing email infrastructure (check <code>api/emails/</code> or equivalent).
           </div>
         </div>
       </div>
@@ -905,7 +1009,6 @@
       <div id="funding-banner-text"></div>
     </div>
 
-    <!-- Void banner (shown when void toggle is on) -->
     <div id="void-banner" class="validation-banner error" style="display:none;">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       <div>
@@ -967,7 +1070,6 @@
             <span class="s-value" id="summary-notes" style="font-weight: 400; color: #64748b;">Annualized Dues: MM/DD/YYYY - MM/DD/YYYY</span>
           </div>
         </div>
-        <!-- Void row (shown only when void toggle on) -->
         <div id="summary-void-row" style="margin-top: 12px; display:none;">
           <div class="summary-item">
             <span class="s-label" style="color:#dc2626;">Void Status</span>
@@ -1002,7 +1104,7 @@
       </button>
       <div style="display: flex; gap: 10px;">
         <button class="btn btn-secondary" onclick="alert('Saved as draft.')">Save as Draft</button>
-        <button class="btn btn-primary" onclick="showSuccess()">
+        <button class="btn btn-primary" onclick="handleFinalSubmit()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
           Create Charge
         </button>
@@ -1017,9 +1119,9 @@
     </div>
     <h2 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Charge Created Successfully</h2>
     <p style="color: #64748b; font-size: 14px; margin-bottom: 8px;">Charge <strong>CHG-40582</strong> has been created for 1247 Elm Creek Dr.</p>
-    <div class="validation-banner warn" style="max-width: 480px; margin: 16px auto; text-align: left;">
+    <div id="success-funding-note" class="validation-banner warn" style="max-width: 480px; margin: 16px auto; text-align: left; display:none;">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-      <div><strong>Funding request FR-8821</strong> has been auto-generated for the $25.00 overage and sent to the approvals queue.</div>
+      <div id="success-funding-text"></div>
     </div>
     <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
       <button class="btn btn-secondary" onclick="location.reload()">Create Another</button>
@@ -1029,6 +1131,45 @@
 
 </div>
 
+<!-- ════════════════════════════════════════════ -->
+<!-- MODALS                                       -->
+<!-- ════════════════════════════════════════════ -->
+
+<!-- Duplicate Charge Modal — mirrors DuplicateChargeModal.tsx + GET /charge/check_duplicates/ -->
+<div id="duplicate-modal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h3>Potential Duplicate Charge Detected</h3>
+    <p>We found an existing charge for this property with the same amount, category, and subcategory within three days of the selected notice date:</p>
+    <div class="modal-charge-card">
+      <div class="mc-amount">
+        <span id="dup-amount">$275.00</span>
+        <a href="#" style="font-size:13px; font-weight:500;">View Charge &rarr;</a>
+      </div>
+      <div class="mc-row"><strong>Category:</strong> <span id="dup-category">Dues - Quarterly Dues</span></div>
+      <div class="mc-row"><strong>Notice Date:</strong> Apr 14, 2026 &nbsp;&middot;&nbsp; <strong>Due Date:</strong> May 14, 2026</div>
+      <div class="mc-row" style="margin-top:6px;"><strong>Notes:</strong> Annualized Dues: 04/14/2026 - 05/14/2026</div>
+      <div class="mc-meta">Created by: Jordan C. on Apr 14, 2026</div>
+    </div>
+    <p>Are you sure you want to create this charge?</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeDuplicateModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="proceedAfterDuplicate()">Continue Anyway</button>
+    </div>
+  </div>
+</div>
+
+<!-- Violation Fine Confirmation — mirrors create.tsx checkViolationFine confirm() -->
+<div id="violation-confirm-modal" class="modal-overlay hidden">
+  <div class="confirm-box">
+    <h3>Missing linked violation</h3>
+    <p>This is a violation fine, and there's no linked violation. Are you sure you want to proceed?</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeViolationModal()">No</button>
+      <button class="btn btn-primary" onclick="proceedAfterViolationConfirm()">Yes</button>
+    </div>
+  </div>
+</div>
+
 <!-- Mode toggle button -->
 <button class="mode-toggle" id="mode-toggle" onclick="toggleCleanMode()">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
@@ -1036,181 +1177,314 @@
 </button>
 
 <script>
-  /* ─── Clean mode toggle (hides prototype chrome) ────────── */
+  /* ─── Clean mode ─────────────────────────────────────────── */
   function applyCleanMode(clean) {
     document.body.classList.toggle('clean-mode', clean);
     document.getElementById('mode-toggle-label').textContent = clean ? 'Show annotations' : 'View clean UI';
     const url = new URL(window.location);
-    if (clean) url.searchParams.set('clean', '1');
-    else url.searchParams.delete('clean');
+    if (clean) url.searchParams.set('clean', '1'); else url.searchParams.delete('clean');
     window.history.replaceState({}, '', url);
   }
-  function toggleCleanMode() {
-    applyCleanMode(!document.body.classList.contains('clean-mode'));
-  }
-  // Apply clean mode on load if ?clean in URL
+  function toggleCleanMode() { applyCleanMode(!document.body.classList.contains('clean-mode')); }
   if (new URLSearchParams(window.location.search).get('clean') === '1') {
-    // Defer until body is available
     document.addEventListener('DOMContentLoaded', () => applyCleanMode(true));
   }
 
-  /* ─── HOA data (property's recurring charge schedule) ────── */
-  // paymentSchedule is the list of recurring expected charges for a property.
-  // Each line item has a label, base amount, and a frequency.
-  // Display amount is derived from frequency based on the selected customer:
-  //   - FirstKey Homes → annualized (amount × periods-per-year)
-  //   - Other customers → quarterlized (amount → quarterly equivalent)
-  //   - One-time items are shown as-is for everyone.
+  /* ─── HOA + Payment Schedule ─────────────────────────────────────────────
+   * HOA (Organization) shape mocks: apps/hoa/api/models.py — Organization
+   * Payment schedule mocks `GET /charge/payment_schedule/?property_id=X&hoa_id=Y`
+   * Real serializer: apps/hoa/api/admin_api/serializers/payment_schedule.py
+   * Real model:      apps/hoa/api/models.py — PaymentSchedule
+   *
+   * Real response shape:
+   *   { current: PaymentScheduleItem[], future: PaymentScheduleItem[] }
+   *
+   * Each PaymentScheduleItem includes:
+   *   - id (UUID)
+   *   - schedule_type ('dues' | 'utility' | 'assessment' | 'tax' | 'amenities' | 'maintenance' | 'other')
+   *   - schedule_subtype (string | null)        — e.g., 'water', 'gas' for utilities
+   *   - name, description
+   *   - frequency ('monthly' | 'quarterly' | 'semi_annually' | 'annually' | 'custom')
+   *   - payment_config: { payment_day, payment_months: { '1'..'12': cents } }
+   *   - is_active, total_annual_amount (cents, computed)
+   *
+   * GOTCHA: amounts are in CENTS in payment_months. total_annual_amount is sum.
+   * GOTCHA: 'one-time' isn't a real frequency — use schedule_type='assessment' with
+   *         a single populated payment_month for one-off charges.
+   * ─────────────────────────────────────────────────────────────────────── */
   const hoaData = {
     'elm_creek': {
+      // Organization fields
+      id: '11111111-1111-1111-1111-111111111111',
       name: 'Elm Creek HOA',
+      is_build_to_rent: false,
+      // Mock /charge/payment_schedule/ response.current
       paymentSchedule: [
-        { label: 'Dues',                  amount: 275.00, frequency: 'quarterly' },
-        { label: 'Special Assessment',    amount: 200.00, frequency: 'one-time' },
-        { label: 'Lawn Maintenance',      amount: 50.00,  frequency: 'monthly' },
-        { label: 'Pool Fob Replacement',  amount: 75.00,  frequency: 'one-time' }
+        {
+          id: 'ps-elm-001', schedule_type: 'dues', schedule_subtype: null,
+          name: 'Quarterly Dues', frequency: 'quarterly',
+          // $275 every quarter (Jan/Apr/Jul/Oct)
+          payment_config: { payment_day: 1, payment_months: { '1': 27500, '4': 27500, '7': 27500, '10': 27500 } },
+          is_active: true
+        },
+        {
+          id: 'ps-elm-002', schedule_type: 'maintenance', schedule_subtype: 'lawn',
+          name: 'Lawn Maintenance', frequency: 'monthly',
+          payment_config: { payment_day: 1, payment_months: Object.fromEntries(
+            Array.from({length: 12}, (_, i) => [String(i+1), 5000])
+          )},
+          is_active: true
+        },
+        {
+          id: 'ps-elm-003', schedule_type: 'assessment', schedule_subtype: null,
+          name: 'Special Assessment', frequency: 'custom',
+          payment_config: { payment_day: 15, payment_months: { '6': 20000 } },
+          is_active: true
+        },
+        {
+          id: 'ps-elm-004', schedule_type: 'amenities', schedule_subtype: 'pool_fob',
+          name: 'Pool Fob Replacement', frequency: 'custom',
+          payment_config: { payment_day: 1, payment_months: { '1': 7500 } },
+          is_active: true
+        }
+      ]
+    },
+    'elm_creek_btr': {
+      id: '22222222-2222-2222-2222-222222222222',
+      name: 'Elm Creek BTR', is_build_to_rent: true,
+      paymentSchedule: [
+        {
+          id: 'ps-btr-001', schedule_type: 'dues', schedule_subtype: null,
+          name: 'Quarterly Dues', frequency: 'quarterly',
+          payment_config: { payment_day: 1, payment_months: { '1': 31000, '4': 31000, '7': 31000, '10': 31000 } },
+          is_active: true
+        },
+        {
+          id: 'ps-btr-002', schedule_type: 'assessment', schedule_subtype: null,
+          name: 'Special Assessment', frequency: 'custom',
+          payment_config: { payment_day: 1, payment_months: { '3': 15000 } },
+          is_active: true
+        }
       ]
     },
     'willow_ridge': {
-      name: 'Willow Ridge Community Association',
+      id: '33333333-3333-3333-3333-333333333333',
+      name: 'Willow Ridge Community Association', is_build_to_rent: false,
       paymentSchedule: [
-        { label: 'Dues',                  amount: 145.00,  frequency: 'monthly' },
-        { label: 'Special Assessment',    amount: 350.00,  frequency: 'one-time' },
-        { label: 'Amenities Fee',         amount: 40.00,   frequency: 'monthly' }
+        {
+          id: 'ps-wr-001', schedule_type: 'dues', schedule_subtype: null,
+          name: 'Monthly Dues', frequency: 'monthly',
+          payment_config: { payment_day: 1, payment_months: Object.fromEntries(
+            Array.from({length: 12}, (_, i) => [String(i+1), 14500])
+          )},
+          is_active: true
+        },
+        {
+          id: 'ps-wr-002', schedule_type: 'amenities', schedule_subtype: null,
+          name: 'Amenities Fee', frequency: 'monthly',
+          payment_config: { payment_day: 1, payment_months: Object.fromEntries(
+            Array.from({length: 12}, (_, i) => [String(i+1), 4000])
+          )},
+          is_active: true
+        },
+        {
+          id: 'ps-wr-003', schedule_type: 'assessment', schedule_subtype: null,
+          name: 'Special Assessment', frequency: 'custom',
+          payment_config: { payment_day: 1, payment_months: { '8': 35000 } },
+          is_active: true
+        }
       ]
     }
   };
 
-  // Periods-per-year for each frequency
-  const periodsPerYear = { monthly: 12, quarterly: 4, 'semi-annual': 2, annual: 1 };
+  /* ─── Helpers for payment schedule items (operating on real shape) ────── */
+  const PERIODS_PER_YEAR = { monthly: 12, quarterly: 4, semi_annually: 2, annually: 1 };
 
-  // Convert an item's base amount to the display amount for the current customer
-  function getDisplayAmount(item) {
-    if (item.frequency === 'one-time') return item.amount;
-    const customer = document.getElementById('customer-select').value;
-    const periods = periodsPerYear[item.frequency] || 1;
-    if (customer === 'firstkey') {
-      // Annualized: monthly × 12, quarterly × 4, semi-annual × 2
-      return item.amount * periods;
-    } else {
-      // Quarterlized: monthly × 3, quarterly × 1, semi-annual ÷ 2, annual ÷ 4
-      return item.amount * (periods / 4);
+  // For a given schedule item, compute the per-period amount (cents) using the first
+  // populated month in payment_months. Custom/one-time schedules return total instead.
+  function periodAmountCents(item) {
+    const months = item.payment_config && item.payment_config.payment_months || {};
+    const populated = Object.values(months).filter(v => v > 0);
+    if (item.frequency === 'custom' || populated.length === 0) {
+      return populated.reduce((a, b) => a + b, 0);  // total for one-time / custom
     }
+    return populated[0]; // recurring schedules have equal amounts each period
   }
 
-  // Build the display label for a schedule item: "<Label> (<View Frequency>)"
+  function totalAnnualCents(item) {
+    const months = item.payment_config && item.payment_config.payment_months || {};
+    return Object.values(months).reduce((a, b) => a + b, 0);
+  }
+
+  function isOneTime(item) { return item.frequency === 'custom'; }
+
+  function fmtUSD(cents) { return '$' + (cents / 100).toFixed(2); }
+
+  function getDisplayAmountCents(item) {
+    if (isOneTime(item)) return periodAmountCents(item);
+    const portfolio = PORTFOLIOS[document.getElementById('customer-select').value] || PORTFOLIOS['evergreen'];
+    const periods   = PERIODS_PER_YEAR[item.frequency] || 1;
+    if (portfolio.annualization_view === 'annualized') {
+      return totalAnnualCents(item);                         // = period × periods
+    }
+    // quarterlized: convert per-period amount to a quarterly-equivalent
+    return Math.round(periodAmountCents(item) * (periods / 4));
+  }
+
   function getDisplayLabel(item) {
-    if (item.frequency === 'one-time') return item.label + ' (One-time)';
-    const customer = document.getElementById('customer-select').value;
-    const view = (customer === 'firstkey') ? 'Annualized' : 'Quarterlized';
-    return item.label + ' (' + view + ')';
+    if (isOneTime(item)) return item.name + ' (One-time)';
+    const portfolio = PORTFOLIOS[document.getElementById('customer-select').value] || PORTFOLIOS['evergreen'];
+    const view = portfolio.annualization_view === 'annualized' ? 'Annualized' : 'Quarterlized';
+    return item.name + ' (' + view + ')';
   }
 
-  /* ─── Category / Subcategory data model ─────────────────── */
-  const categoryData = {
-    // FirstKey Homes — curated set
-    firstkey: {
-      categories: ['Dues', 'Fees & Fines'],
-      subcategories: {
-        'Dues': [
-          'Annual Dues',
-          'Dues Increase / Assumed Dues',
-          'Monthly Dues',
-          'Quarterly Dues',
-          'Semi-Annual Dues',
-          'Other'
-        ],
-        'Fees & Fines': [
-          'Admin Fee',
-          'Late Fee',
-          'Other',
-          'Special Assessment',
-          'Utilities Fee',
-          'Violation Fine'
-        ]
-      }
+  function onHoaChange() {
+    const val = document.getElementById('hoa-select').value;
+    const hoa = hoaData[val];
+    // BTR flag: Organization.is_build_to_rent (boolean)
+    document.getElementById('btr-warn').style.display = (hoa && hoa.is_build_to_rent) ? 'flex' : 'none';
+    const hoaHint = document.getElementById('hoa-hint');
+    if (hoa && hoa.paymentSchedule && hoa.paymentSchedule.length > 0) {
+      hoaHint.style.display = 'block';
+      hoaHint.innerHTML = hoa.paymentSchedule.length + ' active payment schedules on file for this property.';
+    } else {
+      hoaHint.style.display = 'none';
+    }
+    refreshPaymentSchedule();
+    if (!chargeAmountManuallyEdited) autoFillChargeAmount();
+  }
+
+  /* ─── Categories & Subcategories ─────────────────────────────────────────
+   * Mock of `GET /charge/categories/?portfolio_id=<id>` response.
+   * Real source: apps/hoa/api/admin_api/serializers/serializers.py (ChargeCategorySerializer)
+   * Real hook:   apps/hoa/hoa-web/apps/admin/src/routes/specific/charge/hooks/useChargeCategories.ts
+   *
+   * Server returns flat list of categories with nested subcategories. When portfolio_id is
+   * passed, server filters by Portfolio.allowed_charge_categories (M2M). If the portfolio
+   * has no restriction, ALL categories are returned.
+   * ─────────────────────────────────────────────────────────────────────── */
+  const ALL_CATEGORIES = [
+    // ChargeCategory.id is an AutoField (integer), not UUID. IDs here are illustrative.
+    { id: 1, name: 'Dues', subcategories: [
+      { id: 101, name: 'Annual Dues' },
+      { id: 102, name: 'Dues Increase / Assumed Dues' },
+      { id: 103, name: 'Monthly Dues' },
+      { id: 104, name: 'Quarterly Dues' },
+      { id: 105, name: 'Semi-Annual Dues' },
+      { id: 106, name: 'Other' }
+    ]},
+    { id: 2, name: 'Fees & Fines', subcategories: [
+      { id: 201, name: 'Admin Fee' },
+      { id: 202, name: 'Amenities Fee' },
+      { id: 203, name: 'Closing Fee' },
+      { id: 204, name: 'Collections / Legal Fee' },
+      { id: 205, name: 'Internet Fee' },
+      { id: 206, name: 'Late Fee' },
+      { id: 207, name: 'Late Interest' },
+      { id: 208, name: 'Lease Registration Fee' },
+      { id: 209, name: 'Other' },
+      { id: 210, name: 'Special Assessment' },
+      { id: 211, name: 'Utilities Fee' },
+      { id: 212, name: 'Violation Fine' }
+    ]},
+    { id: 3, name: 'Adjustments & Miscellaneous', subcategories: [
+      { id: 301, name: 'Adjustment' },
+      { id: 302, name: 'Other' },
+      { id: 303, name: 'Payment' },
+      { id: 304, name: 'Rolling Prior Balance' }
+    ]}
+  ];
+
+  /* ─── Portfolio model (the "customer") ───────────────────────────────────
+   * Real source: apps/hoa/api/models.py — Portfolio
+   * Each Property.portfolio_id identifies which customer owns it.
+   *
+   * `allowed_charge_categories` is a real M2M field. Empty array (or null) means
+   * "all categories allowed". Non-empty restricts the dropdown.
+   *
+   * Real portfolio UUIDs (for reference, used here as illustrative names):
+   *   FirstKey Homes:        943295f6-9543-4035-9e2f-38f8a1b5be7e
+   *   Evergreen Residential: 1c505537-e8a4-495a-bc14-329f10349d74
+   *   Roots:                 e6e49ead-d2f6-45cb-bc3f-5a88262f0c12
+   *   Flock Homes:           a5ec0146-c15d-419e-b68d-5b1fb2e80fd1
+   * ─────────────────────────────────────────────────────────────────────── */
+  const PORTFOLIOS = {
+    'firstkey': {
+      id: '943295f6-9543-4035-9e2f-38f8a1b5be7e',
+      name: 'FirstKey Homes',
+      // FirstKey only allows Dues + Fees & Fines, with a curated subset of Fees & Fines:
+      allowed_charge_categories: [1, 2],
+      // ↓ Customer-specific subcategory filter — NOT in current backend schema.
+      // Backend gap: needs a Portfolio.allowed_charge_subcategories M2M, OR a join table.
+      _allowed_subcategory_ids: [
+        101, 102, 103, 104, 105, 106,        // all Dues
+        201, 206, 209, 210, 211, 212         // Fees & Fines: Admin, Late, Other, Special Assess., Utilities, Violation
+      ],
+      charge_default_customer_visible: true,
+      annualization_view: 'annualized'      // FK convention: see dues annualized
     },
-    // Evergreen — includes Adjustments & Miscellaneous
-    evergreen: {
-      categories: ['Dues', 'Fees & Fines', 'Adjustments & Miscellaneous'],
-      subcategories: {
-        'Dues': [
-          'Annual Dues',
-          'Dues Increase / Assumed Dues',
-          'Monthly Dues',
-          'Quarterly Dues',
-          'Semi-Annual Dues',
-          'Other'
-        ],
-        'Fees & Fines': [
-          'Admin Fee',
-          'Amenities Fee',
-          'Closing Fee',
-          'Collections / Legal Fee',
-          'Internet Fee',
-          'Late Fee',
-          'Late Interest',
-          'Lease Registration Fee',
-          'Other',
-          'Special Assessment',
-          'Utilities Fee',
-          'Violation Fine'
-        ],
-        'Adjustments & Miscellaneous': [
-          'Adjustment',
-          'Other',
-          'Payment',
-          'Rolling Prior Balance'
-        ]
-      }
+    'evergreen': {
+      id: '1c505537-e8a4-495a-bc14-329f10349d74',
+      name: 'Evergreen Residential',
+      allowed_charge_categories: [1, 2, 3], // Includes Adjustments & Misc.
+      _allowed_subcategory_ids: null,       // no subcategory filter — show all
+      charge_default_customer_visible: true,
+      annualization_view: 'quarterlized'
     },
-    // Default for all other customers — full set
-    default: {
-      categories: ['Dues', 'Fees & Fines'],
-      subcategories: {
-        'Dues': [
-          'Annual Dues',
-          'Dues Increase / Assumed Dues',
-          'Monthly Dues',
-          'Other',
-          'Quarterly Dues'
-        ],
-        'Fees & Fines': [
-          'Admin Fee',
-          'Amenities Fee',
-          'Closing Fee',
-          'Collections / Legal Fee',
-          'Internet Fee',
-          'Late Fee',
-          'Late Interest',
-          'Lease Registration Fee',
-          'Other',
-          'Special Assessment',
-          'Utilities Fee',
-          'Violation Fine'
-        ]
-      }
+    'other_1': {
+      id: '00000000-0000-0000-0000-000000000001',
+      name: 'Invitation Homes',
+      allowed_charge_categories: [1, 2],
+      _allowed_subcategory_ids: null,
+      charge_default_customer_visible: true,
+      annualization_view: 'quarterlized'
+    },
+    'other_2': {
+      id: '00000000-0000-0000-0000-000000000002',
+      name: 'American Homes 4 Rent',
+      allowed_charge_categories: [1, 2],
+      _allowed_subcategory_ids: null,
+      charge_default_customer_visible: true,
+      annualization_view: 'quarterlized'
     }
   };
 
+  /* Returns the ChargeCategory[] the API would return for the current portfolio,
+     applying the prototype's not-yet-real subcategory filter. */
+  function getCustomerCategories() {
+    const portfolio = PORTFOLIOS[document.getElementById('customer-select').value] || PORTFOLIOS['evergreen'];
+    const allowedCatIds = portfolio.allowed_charge_categories;
+    const allowedSubIds = portfolio._allowed_subcategory_ids;
+    return ALL_CATEGORIES
+      .filter(c => !allowedCatIds || allowedCatIds.length === 0 || allowedCatIds.includes(c.id))
+      .map(c => ({
+        ...c,
+        subcategories: allowedSubIds
+          ? c.subcategories.filter(s => allowedSubIds.includes(s.id))
+          : c.subcategories
+      }));
+  }
+
+  /* Backwards-compatible adapter for the existing UI code that reads category/sub by name. */
   function getCustomerConfig() {
-    const val = document.getElementById('customer-select').value;
-    return categoryData[val] || categoryData['default'];
+    const cats = getCustomerCategories();
+    return {
+      categories: cats.map(c => c.name),
+      subcategories: Object.fromEntries(cats.map(c => [c.name, c.subcategories.map(s => s.name)]))
+    };
   }
 
   function populateCategories() {
     const config = getCustomerConfig();
     const catSel = document.getElementById('category-select');
-    const prev = catSel.value;
+    const prev   = catSel.value;
     catSel.innerHTML = '<option value="">Select a category</option>';
     config.categories.forEach(c => {
       const opt = document.createElement('option');
-      opt.value = c;
-      opt.textContent = c;
+      opt.value = c; opt.textContent = c;
       if (c === prev) opt.selected = true;
       catSel.appendChild(opt);
     });
-    // Show hint for FirstKey
     const hint = document.getElementById('category-hint');
     if (document.getElementById('customer-select').value === 'firstkey') {
       hint.style.display = 'block';
@@ -1222,20 +1496,17 @@
   }
 
   function populateSubcategories() {
-    const config = getCustomerConfig();
-    const cat = document.getElementById('category-select').value;
-    const subSel = document.getElementById('subcategory-select');
+    const config  = getCustomerConfig();
+    const cat     = document.getElementById('category-select').value;
+    const subSel  = document.getElementById('subcategory-select');
     const subHint = document.getElementById('subcategory-hint');
     subSel.innerHTML = '<option value="">Select a subcategory</option>';
-
     if (cat && config.subcategories[cat]) {
       config.subcategories[cat].forEach(s => {
         const opt = document.createElement('option');
-        opt.value = s;
-        opt.textContent = s;
+        opt.value = s; opt.textContent = s;
         subSel.appendChild(opt);
       });
-      // Hint for FirstKey restricted subcategories
       if (document.getElementById('customer-select').value === 'firstkey' && cat === 'Fees & Fines') {
         subHint.style.display = 'block';
         subHint.innerHTML = 'Filtered for <strong>FirstKey Homes</strong> — 6 of 12 subcategories shown';
@@ -1249,9 +1520,7 @@
 
   function onCustomerChange() {
     populateCategories();
-    // Refresh payment schedule labels/amounts for the new customer view
     refreshPaymentSchedule();
-    // Clear manual override so schedule auto-fill re-engages with new amounts
     chargeAmountManuallyEdited = false;
     autoFillChargeAmount();
   }
@@ -1260,7 +1529,6 @@
     populateSubcategories();
     autoPopulateNotes();
     refreshPaymentSchedule();
-    // If switching away from Dues, clear any auto-filled amount so operator enters manually
     const cat = document.getElementById('category-select').value;
     if (cat !== 'Dues') {
       chargeAmountManuallyEdited = false;
@@ -1277,21 +1545,7 @@
     autoFillChargeAmount();
   }
 
-  function onHoaChange() {
-    const hoaSel = document.getElementById('hoa-select');
-    const hoaHint = document.getElementById('hoa-hint');
-    const hoa = hoaData[hoaSel.value];
-    if (hoa && hoa.paymentSchedule && hoa.paymentSchedule.length > 0) {
-      hoaHint.style.display = 'block';
-      hoaHint.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> ' + hoa.paymentSchedule.length + ' recurring charges on file for this property.';
-    } else {
-      hoaHint.style.display = 'none';
-    }
-    refreshPaymentSchedule();
-    autoFillChargeAmount();
-  }
-
-  // Track whether charge amount was manually edited (so we don't overwrite on reselect)
+  /* ─── Payment Schedule ──────────────────────────────────── */
   let chargeAmountManuallyEdited = false;
 
   function onChargeAmountInput() {
@@ -1303,64 +1557,48 @@
   }
 
   function onPaymentScheduleChange() {
-    // User explicitly picked a schedule — reset manual override flag so auto-fill takes effect
     chargeAmountManuallyEdited = false;
     autoFillChargeAmount();
   }
 
   function refreshPaymentSchedule() {
-    const row = document.getElementById('payment-schedule-row');
-    const sel = document.getElementById('payment-schedule-select');
+    const row  = document.getElementById('payment-schedule-row');
+    const sel  = document.getElementById('payment-schedule-select');
     const hint = document.getElementById('payment-schedule-hint');
-    const hoaSel = document.getElementById('hoa-select');
-    const hoa = hoaData[hoaSel.value];
-    const cat = document.getElementById('category-select').value;
+    const spec = document.getElementById('payment-schedule-spec');
+    const hoa  = hoaData[document.getElementById('hoa-select').value];
+    const cat  = document.getElementById('category-select').value;
 
-    // Only show for Dues
-    if (cat !== 'Dues') {
-      row.style.display = 'none';
-      return;
-    }
-
-    // Hide if no HOA or no schedule on file
-    if (!hoa || !hoa.paymentSchedule || hoa.paymentSchedule.length === 0) {
-      row.style.display = 'none';
-      return;
-    }
+    if (cat !== 'Dues') { row.style.display = 'none'; return; }
+    if (!hoa || !hoa.paymentSchedule || hoa.paymentSchedule.length === 0) { row.style.display = 'none'; return; }
 
     row.style.display = 'block';
+    spec.style.display = 'block';
     const prev = sel.value;
     sel.innerHTML = '<option value="">Select from schedule...</option>';
     hoa.paymentSchedule.forEach((item, idx) => {
       const opt = document.createElement('option');
       opt.value = String(idx);
-      const displayAmt = getDisplayAmount(item);
-      opt.textContent = getDisplayLabel(item) + '  —  $' + displayAmt.toFixed(2);
+      opt.textContent = getDisplayLabel(item) + '  —  ' + fmtUSD(getDisplayAmountCents(item));
       sel.appendChild(opt);
     });
     if (prev !== '') sel.value = prev;
 
-    const customer = document.getElementById('customer-select').value;
-    const view = (customer === 'firstkey') ? 'annualized' : 'quarterlized';
+    const portfolio = PORTFOLIOS[document.getElementById('customer-select').value] || PORTFOLIOS['evergreen'];
     hint.style.display = 'block';
-    hint.innerHTML = 'Recurring dues are shown <strong>' + view + '</strong> for this customer. One-time charges are shown as-is.';
+    hint.innerHTML = 'Recurring dues shown <strong>' + portfolio.annualization_view + '</strong> for this customer. One-time charges shown as-is.';
   }
 
   function autoFillChargeAmount() {
-    const input = document.getElementById('charge-amount');
-    const hint = document.getElementById('charge-amount-hint');
-
-    // Only auto-fill if user hasn't manually overridden
     if (chargeAmountManuallyEdited) return;
-
-    const hoaSel = document.getElementById('hoa-select');
-    const hoa = hoaData[hoaSel.value];
-    const scheduleIdx = document.getElementById('payment-schedule-select').value;
-
-    if (hoa && scheduleIdx !== '' && hoa.paymentSchedule[scheduleIdx]) {
-      const item = hoa.paymentSchedule[scheduleIdx];
-      const amt = getDisplayAmount(item);
-      input.value = amt.toFixed(2);
+    const hoa  = hoaData[document.getElementById('hoa-select').value];
+    const idx  = document.getElementById('payment-schedule-select').value;
+    const input = document.getElementById('charge-amount');
+    const hint  = document.getElementById('charge-amount-hint');
+    if (hoa && idx !== '' && hoa.paymentSchedule[idx]) {
+      const item = hoa.paymentSchedule[idx];
+      // amount stored as cents in payment_schedule; UI input is dollars
+      input.value = (getDisplayAmountCents(item) / 100).toFixed(2);
       hint.style.display = 'block';
       hint.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Auto-filled from <strong>' + hoa.name + '</strong> &rsaquo; ' + getDisplayLabel(item) + '. You can override.';
       checkAmountMatch();
@@ -1369,16 +1607,15 @@
     }
   }
 
-  /* ─── Note templates ────────────────────────────────────── */
-  // {notice} and {due} are replaced with MM/DD/YYYY dates
+  /* ─── Notes auto-population ─────────────────────────────── */
   const noteTemplates = {
     'Dues': {
-      'Annual Dues':                'Annual Dues: {notice} - {due}',
-      'Monthly Dues':               'Annualized Dues: {notice} - {due}',
-      'Quarterly Dues':             'Annualized Dues: {notice} - {due}',
-      'Semi-Annual Dues':           'Annualized Dues: {notice} - {due}',
-      'Dues Increase / Assumed Dues': 'Dues Increase: {notice} - {due}',
-      'Other':                      '',
+      'Annual Dues':                    'Annual Dues: {notice} - {due}',
+      'Monthly Dues':                   'Annualized Dues: {notice} - {due}',
+      'Quarterly Dues':                 'Annualized Dues: {notice} - {due}',
+      'Semi-Annual Dues':               'Annualized Dues: {notice} - {due}',
+      'Dues Increase / Assumed Dues':   'Dues Increase: {notice} - {due}',
+      'Other': '',
     },
     'Fees & Fines': {
       'Admin Fee':              'Admin Fee - Assessment: {notice} - {due}',
@@ -1395,48 +1632,30 @@
       'Other':                  'Fee Type: {notice} - {due}',
     },
     'Adjustments & Miscellaneous': {
-      'Adjustment':             'Adjustment: {notice} - {due}',
-      'Rolling Prior Balance':  'Rolling Prior Balance: {notice} - {due}',
-      'Payment':                'Payment: {notice} - {due}',
-      'Other':                  '',
+      'Adjustment':           'Adjustment: {notice} - {due}',
+      'Rolling Prior Balance':'Rolling Prior Balance: {notice} - {due}',
+      'Payment':              'Payment: {notice} - {due}',
+      'Other': '',
     }
   };
 
-  function formatDateUS(isoStr) {
-    return 'MM/DD/YYYY';
-  }
-
   function autoPopulateNotes() {
-    const cat = document.getElementById('category-select').value;
-    const sub = document.getElementById('subcategory-select').value;
+    const cat      = document.getElementById('category-select').value;
+    const sub      = document.getElementById('subcategory-select').value;
     const textarea = document.getElementById('notes-textarea');
-    const hint = document.getElementById('notes-hint');
-
-    if (!cat || !sub) {
-      hint.style.display = 'none';
-      return;
-    }
-
-    const templates = noteTemplates[cat];
-    const tpl = templates ? templates[sub] : null;
-
+    const hint     = document.getElementById('notes-hint');
+    if (!cat || !sub) { hint.style.display = 'none'; return; }
+    const tpl = (noteTemplates[cat] || {})[sub];
     if (tpl !== null && tpl !== undefined) {
-      const notice = formatDateUS(document.getElementById('notice-date').value);
-      const due = formatDateUS(document.getElementById('due-date').value);
-      const note = tpl.replace(/\{notice\}/g, notice).replace(/\{due\}/g, due);
-      textarea.value = note;
-      if (tpl) {
-        hint.style.display = 'block';
-        hint.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Auto-populated from <strong>' + cat + ' &rsaquo; ' + sub + '</strong> template. Edit freely — brackets [ ] indicate fields to fill in.';
-      } else {
-        hint.style.display = 'block';
-        hint.innerHTML = 'No template for this subcategory — enter notes manually.';
-      }
+      textarea.value = tpl.replace(/\{notice\}/g, 'MM/DD/YYYY').replace(/\{due\}/g, 'MM/DD/YYYY');
+      hint.style.display = 'block';
+      hint.innerHTML = tpl
+        ? '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Auto-populated from <strong>' + cat + ' &rsaquo; ' + sub + '</strong> template. Edit freely — [ ] indicate fields to fill in.'
+        : 'No template for this subcategory — enter notes manually.';
     }
   }
 
   function onNoticeDateChange() {
-    // Auto-update due date to 30 days later
     const nd = document.getElementById('notice-date').value;
     if (nd) {
       const d = new Date(nd);
@@ -1446,144 +1665,12 @@
     autoPopulateNotes();
   }
 
-  // Initialize on page load
-  document.addEventListener('DOMContentLoaded', () => {
-    populateCategories();
-    // Pre-select Dues > Quarterly Dues for the demo
-    document.getElementById('category-select').value = 'Dues';
-    populateSubcategories();
-    document.getElementById('subcategory-select').value = 'Quarterly Dues';
-    // Pre-select the first schedule item (Dues Quarterly) to demo auto-fill
-    refreshPaymentSchedule();
-    document.getElementById('payment-schedule-select').value = '0';
-    autoFillChargeAmount();
-    autoPopulateNotes();
-  });
-
-  /* ─── Step navigation ───────────────────────────────────── */
-  function goToStep(n) {
-    showStep(n);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function showStep(n) {
-    document.getElementById('step-1').style.display = n === 1 ? 'block' : 'none';
-    document.getElementById('step-2').style.display = n === 2 ? 'block' : 'none';
-    document.getElementById('step-3').style.display = n === 3 ? 'block' : 'none';
-    document.getElementById('success-state').style.display = 'none';
-
-    // Update summary on step 3
-    if (n === 3) updateSummary();
-
-    document.querySelectorAll('.step').forEach((el, i) => {
-      el.classList.remove('active', 'completed');
-      if (i + 1 === n) el.classList.add('active');
-      if (i + 1 < n) el.classList.add('completed');
-    });
-  }
-
-  function updateSummary() {
-    const cat = document.getElementById('category-select').value || '—';
-    const sub = document.getElementById('subcategory-select').value || '—';
-    const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
-
-    setText('summary-category', cat + (sub !== '—' ? ' \u203A ' + sub : ''));
-
-    // HOA
-    const hoaSel = document.getElementById('hoa-select');
-    const hoaText = hoaSel.options[hoaSel.selectedIndex]?.text.split(' — ')[0] || '—';
-    setText('summary-hoa', hoaText);
-
-    // Amounts
-    const charge = parseFloat(document.getElementById('charge-amount').value) || 0;
-    const approved = parseFloat(document.getElementById('approved-amount').value) || 0;
-    setText('summary-charge-amount', '$' + charge.toFixed(2));
-    setText('summary-approved-amount', approved ? '$' + approved.toFixed(2) : '—');
-    const approvedEl = document.getElementById('summary-approved-amount');
-    if (approvedEl) approvedEl.style.color = (approved && charge !== approved) ? '#dc2626' : '#0f172a';
-
-    // Funding-request banner
-    const fundingBanner = document.getElementById('funding-banner');
-    const fundingText = document.getElementById('funding-banner-text');
-    if (fundingBanner && fundingText) {
-      if (approved > 0 && charge > approved) {
-        const diff = (charge - approved).toFixed(2);
-        fundingBanner.style.display = 'flex';
-        fundingText.innerHTML = '<strong>Insufficient approved funds.</strong> The customer-approved amount ($' + approved.toFixed(2) + ') will not cover the full charge ($' + charge.toFixed(2) + '). A shortfall of $' + diff + ' will need additional funding approval before this charge can be paid.';
-      } else {
-        fundingBanner.style.display = 'none';
-      }
-    }
-
-    // Dates
-    const fmtDate = (iso) => {
-      if (!iso) return '—';
-      const d = new Date(iso + 'T00:00:00');
-      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    };
-    setText('summary-notice-date', fmtDate(document.getElementById('notice-date').value));
-    setText('summary-due-date', fmtDate(document.getElementById('due-date').value));
-
-    // Notes
-    setText('summary-notes', document.getElementById('notes-textarea').value || '—');
-
-    // Void status
-    const isVoid = document.getElementById('void-toggle').classList.contains('on');
-    const voidBanner = document.getElementById('void-banner');
-    const voidBadge = document.getElementById('summary-status-badge');
-    const voidRow = document.getElementById('summary-void-row');
-    const voidNotes = document.getElementById('void-notes').value.trim();
-
-    if (isVoid) {
-      voidBanner.style.display = 'flex';
-      voidBadge.style.display = 'inline-block';
-      voidRow.style.display = 'block';
-      const notesText = voidNotes || '(no reason provided)';
-      setText('summary-void-notes', notesText);
-      document.getElementById('void-banner-notes').textContent = voidNotes
-        ? 'Reason: ' + voidNotes
-        : 'No void reason provided. Consider adding one before submitting.';
-    } else {
-      voidBanner.style.display = 'none';
-      voidBadge.style.display = 'none';
-      voidRow.style.display = 'none';
-    }
-
-    // Charge Voided Yes/No
-    const voidedEl = document.getElementById('summary-voided');
-    if (voidedEl) {
-      voidedEl.textContent = isVoid ? 'Yes' : 'No';
-      voidedEl.style.color = isVoid ? '#dc2626' : '#94a3b8';
-    }
-
-    // Customer Visible / Notification (look for toggles by position)
-    const toggles = document.querySelectorAll('.toggle-row .toggle');
-    // toggles: [void, customer-visible, send-notification]
-    const visEl = document.getElementById('summary-visible');
-    const notifEl = document.getElementById('summary-notification');
-    if (toggles[1]) {
-      const on = toggles[1].classList.contains('on');
-      visEl.textContent = on ? 'Yes' : 'No';
-      visEl.style.color = on ? '#16a34a' : '#94a3b8';
-    }
-    if (toggles[2]) {
-      const on = toggles[2].classList.contains('on');
-      notifEl.textContent = on ? 'Yes' : 'No';
-      notifEl.style.color = on ? '#16a34a' : '#94a3b8';
-    }
-  }
-
   /* ─── Amount match ──────────────────────────────────────── */
   function checkAmountMatch() {
-    const charge = parseFloat(document.getElementById('charge-amount').value) || 0;
+    const charge   = parseFloat(document.getElementById('charge-amount').value) || 0;
     const approved = parseFloat(document.getElementById('approved-amount').value) || 0;
     const ind = document.getElementById('amount-indicator');
-
-    if (approved === 0) {
-      ind.style.display = 'none';
-      return;
-    }
-
+    if (approved === 0) { ind.style.display = 'none'; return; }
     ind.style.display = 'flex';
     if (charge === approved) {
       ind.className = 'amount-match match';
@@ -1591,14 +1678,131 @@
     } else if (charge > approved) {
       const diff = (charge - approved).toFixed(2);
       ind.className = 'amount-match mismatch';
-      ind.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg><span><strong>Insufficient approved funds:</strong> Approved amount is $${diff} short of the charge. Additional funding approval will be required.</span>`;
+      ind.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg><span><strong>Insufficient approved funds:</strong> Approved is $${diff} short. Additional funding approval will be required.</span>`;
     } else {
-      // charge < approved — approved exceeds charge, not a blocker, but surface it
       const diff = (approved - charge).toFixed(2);
       ind.className = 'amount-match mismatch';
-      ind.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span><strong>Approved amount exceeds charge</strong> by $${diff}. Verify the charge amount is correct.</span>`;
+      ind.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span><strong>Approved exceeds charge</strong> by $${diff}. Verify the charge amount.</span>`;
     }
   }
+
+  /* ─── Step navigation ───────────────────────────────────── */
+  function goToStep(n) { showStep(n); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+  function showStep(n) {
+    document.getElementById('step-1').style.display = n === 1 ? 'block' : 'none';
+    document.getElementById('step-2').style.display = n === 2 ? 'block' : 'none';
+    document.getElementById('step-3').style.display = n === 3 ? 'block' : 'none';
+    document.getElementById('success-state').style.display = 'none';
+    if (n === 3) updateSummary();
+    document.querySelectorAll('.step').forEach((el, i) => {
+      el.classList.remove('active', 'completed');
+      if (i + 1 === n) el.classList.add('active');
+      if (i + 1 < n) el.classList.add('completed');
+    });
+  }
+
+  /* ─── Summary update ────────────────────────────────────── */
+  function updateSummary() {
+    const cat = document.getElementById('category-select').value || '—';
+    const sub = document.getElementById('subcategory-select').value || '—';
+    const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+
+    setText('summary-category', cat + (sub !== '—' ? ' › ' + sub : ''));
+
+    const hoaSel = document.getElementById('hoa-select');
+    setText('summary-hoa', hoaSel.options[hoaSel.selectedIndex]?.text.split(' — ')[0] || '—');
+
+    const charge   = parseFloat(document.getElementById('charge-amount').value) || 0;
+    const approved = parseFloat(document.getElementById('approved-amount').value) || 0;
+    setText('summary-charge-amount', '$' + charge.toFixed(2));
+    setText('summary-approved-amount', approved ? '$' + approved.toFixed(2) : '—');
+    const approvedEl = document.getElementById('summary-approved-amount');
+    if (approvedEl) approvedEl.style.color = (approved && charge !== approved) ? '#dc2626' : '#0f172a';
+
+    const fundingBanner = document.getElementById('funding-banner');
+    const fundingText   = document.getElementById('funding-banner-text');
+    if (approved > 0 && charge > approved) {
+      const diff = (charge - approved).toFixed(2);
+      fundingBanner.style.display = 'flex';
+      fundingText.innerHTML = '<strong>Insufficient approved funds.</strong> The approved amount ($' + approved.toFixed(2) + ') will not cover the full charge ($' + charge.toFixed(2) + '). A shortfall of $' + diff + ' will need additional funding approval.';
+    } else {
+      fundingBanner.style.display = 'none';
+    }
+
+    const fmtDate = (iso) => {
+      if (!iso) return '—';
+      const d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    };
+    setText('summary-notice-date', fmtDate(document.getElementById('notice-date').value));
+    setText('summary-due-date',    fmtDate(document.getElementById('due-date').value));
+    setText('summary-notes',       document.getElementById('notes-textarea').value || '—');
+
+    const isVoid   = document.getElementById('void-toggle').classList.contains('on');
+    const voidNotes = document.getElementById('void-notes').value.trim();
+    document.getElementById('void-banner').style.display   = isVoid ? 'flex' : 'none';
+    document.getElementById('summary-status-badge').style.display = isVoid ? 'inline-block' : 'none';
+    document.getElementById('summary-void-row').style.display     = isVoid ? 'block' : 'none';
+    if (isVoid) {
+      setText('summary-void-notes', voidNotes || '(no reason provided)');
+      document.getElementById('void-banner-notes').textContent = voidNotes
+        ? 'Reason: ' + voidNotes
+        : 'No void reason provided. Consider adding one before submitting.';
+    }
+
+    setText('summary-voided', isVoid ? 'Yes' : 'No');
+    const voidedEl = document.getElementById('summary-voided');
+    if (voidedEl) voidedEl.style.color = isVoid ? '#dc2626' : '#94a3b8';
+
+    const visOn   = document.getElementById('visible-toggle').classList.contains('on');
+    const notifOn = document.getElementById('notify-toggle').classList.contains('on');
+    setText('summary-visible', visOn ? 'Yes' : 'No');
+    setText('summary-notification', notifOn ? 'Yes' : 'No');
+    const visEl   = document.getElementById('summary-visible');
+    const notifEl = document.getElementById('summary-notification');
+    if (visEl)   visEl.style.color   = visOn   ? '#16a34a' : '#94a3b8';
+    if (notifEl) notifEl.style.color = notifOn ? '#16a34a' : '#94a3b8';
+  }
+
+  /* ─── Submit flow ───────────────────────────────────────── */
+  // 1. Violation Fine without linked violation → confirm dialog (mirrors create.tsx)
+  // 2. Duplicate check → duplicate modal (mirrors useCheckDuplicateCharges)
+  // 3. Success
+
+  function isViolationFineWithoutLink() {
+    const sub = document.getElementById('subcategory-select').value;
+    const vio = document.getElementById('violation-select').value;
+    return sub.toLowerCase() === 'violation fine' && !vio;
+  }
+
+  function handleFinalSubmit() {
+    if (isViolationFineWithoutLink()) {
+      document.getElementById('violation-confirm-modal').classList.remove('hidden');
+      return;
+    }
+    proceedToDuplicateCheck();
+  }
+
+  function closeViolationModal() { document.getElementById('violation-confirm-modal').classList.add('hidden'); }
+  function proceedAfterViolationConfirm() { closeViolationModal(); proceedToDuplicateCheck(); }
+
+  function proceedToDuplicateCheck() {
+    // Simulate: show duplicate modal when amount=275 + Dues/Quarterly Dues (demo trigger)
+    const charge  = parseFloat(document.getElementById('charge-amount').value) || 0;
+    const cat     = document.getElementById('category-select').value;
+    const sub     = document.getElementById('subcategory-select').value;
+    if (charge === 275 && cat === 'Dues' && sub === 'Quarterly Dues') {
+      document.getElementById('dup-amount').textContent = '$' + charge.toFixed(2);
+      document.getElementById('dup-category').textContent = cat + ' - ' + sub;
+      document.getElementById('duplicate-modal').classList.remove('hidden');
+      return;
+    }
+    showSuccess();
+  }
+
+  function closeDuplicateModal() { document.getElementById('duplicate-modal').classList.add('hidden'); }
+  function proceedAfterDuplicate() { closeDuplicateModal(); showSuccess(); }
 
   /* ─── File upload ───────────────────────────────────────── */
   function addFile() {
@@ -1617,8 +1821,32 @@
     document.getElementById('step-3').style.display = 'none';
     document.getElementById('success-state').style.display = 'block';
     document.querySelectorAll('.step').forEach(el => el.classList.add('completed'));
+
+    const charge   = parseFloat(document.getElementById('charge-amount').value) || 0;
+    const approved = parseFloat(document.getElementById('approved-amount').value) || 0;
+    const noteEl   = document.getElementById('success-funding-note');
+    const textEl   = document.getElementById('success-funding-text');
+    if (approved > 0 && charge > approved) {
+      noteEl.style.display = 'flex';
+      textEl.innerHTML = '<strong>Funding request FR-8821</strong> has been auto-generated for the $' + (charge - approved).toFixed(2) + ' shortfall and sent to the approvals queue.';
+    } else {
+      noteEl.style.display = 'none';
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  /* ─── Init ──────────────────────────────────────────────── */
+  document.addEventListener('DOMContentLoaded', () => {
+    populateCategories();
+    document.getElementById('category-select').value = 'Dues';
+    populateSubcategories();
+    document.getElementById('subcategory-select').value = 'Quarterly Dues';
+    refreshPaymentSchedule();
+    document.getElementById('payment-schedule-select').value = '0';
+    autoFillChargeAmount();
+    autoPopulateNotes();
+    onHoaChange();
+  });
 </script>
 
 </body>

@@ -45,15 +45,22 @@ python3 -m http.server 8000
 # then visit http://localhost:8000
 ```
 
+## For engineers reviewing this
+
+See **[TECH_BRIEF.md](./TECH_BRIEF.md)** for a guardrail-by-guardrail integration map: which existing components and endpoints in the monorepo each piece would plug into, what backend changes are needed, and the open product questions worth working through before any implementation.
+
 ## Integration points
 
-All data in the mock is fake. The state that would drive real behavior is concentrated in three JS objects near the top of the `<script>` block — those are the swap points for real API calls:
+All data in the mock is fake, but the **mock data structures match the real API shapes** in the monorepo. Each block in the `<script>` carries a comment pointing to its real source file. The main swap points:
 
-| Object | What it holds |
-|---|---|
-| `hoaData` | HOA list + each property's payment schedule line items |
-| `categoryData` | Customer-scoped categories and subcategories |
-| `noteTemplates` | Per-category/subcategory note format strings |
+| Object | Mocks | Real source |
+|---|---|---|
+| `ALL_CATEGORIES` | `GET /charge/categories/` response | `apps/hoa/api/admin_api/serializers/serializers.py` |
+| `PORTFOLIOS` | Portfolio model + customer config | `apps/hoa/api/models.py` |
+| `hoaData[*].paymentSchedule` | `GET /charge/payment_schedule/` items | `apps/hoa/api/admin_api/serializers/payment_schedule.py` |
+| `noteTemplates` | (No backend equivalent — see TECH_BRIEF) | — |
+
+Amounts in the mock are stored as **cents** to match the backend's `amount_cents` convention.
 
 ## Context
 
